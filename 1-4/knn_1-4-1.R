@@ -128,6 +128,9 @@ test_split <- id_test[0:2000,-1]
 train_split <- id_train[0:2000,-1]
 test_classes <- id_test[0:2000,1]
 train_classes <- id_train[0:2000,1]
-ret <- run_knn(train_split, test_split, train_classes, k=10)
+ret <- run_knn(train_split, test_split, train_classes, k=3)
 # train: 20000, test: 20000, K: 3  Accuracy: 83.81  Runtime: 4.397083
-# train: 20000, test: 20000, K: 3  Accuracy: 83.81  Runtime: 4.397083
+# train: 20000, test: 20000, K: 10  Accuracy: 83.07  Runtime: 4.330401 
+# train: 2000, test: 2000, K: 3  Accuracy: 95.95  Runtime: 2.636359
+# train: 2000, test: 2000, K: 10  Accuracy: 95.6  Runtime: 2.699462 
+
