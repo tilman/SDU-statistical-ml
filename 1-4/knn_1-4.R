@@ -82,14 +82,9 @@ for (i in c(1:10)) {
   test_classes <- id_shuffle[0:2000,1]
   train_classes <- id_shuffle[2001:4000,1]
   
-  accuracy <- function(x){
-    sum(diag(x)/(sum(rowSums(x)))) * 100
-  }
-  id_test_prediction <- knn(train_split, test_split, train_classes, k=11)
-  confusion_matrix <- table(id_test_prediction, test_classes)
-  acc = accuracy(confusion_matrix)
-  aList[i] <- accuracy(confusion_matrix)
-  cat("Folder:",i ," Accuracy:",acc, "\n")
+  ret <- run_knn(train_split, test_split, train_classes, k=11)
+  aList[i] <- ret$Accuracy
+  cat("Folder:",i ," Accuracy:",ret$Accuracy, "\n")
 }
 aList
 mean(aList)
