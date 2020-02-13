@@ -1,5 +1,7 @@
 library(class)
 
+set.seed(423)
+
 load("~/Downloads/id100.rda")
 dataset_shuffle <- id[sample(nrow(id)),]
 test_split <- dataset_shuffle[0:2000,-1]
@@ -62,3 +64,63 @@ print(runtimes)
 print(accs)
 mean(accs)
 var(accs)
+
+
+
+# 1.4.4 
+load("~/Downloads/idList-co-100.rdata")
+
+# Individual 
+aList <- c(1:10)
+for (i in c(1:10)) {
+  id <- do.call(rbind, idList[i])
+  id <- as.data.frame(id)
+  id_shuffle <- id[sample(nrow(id)),]
+  test_split <- id_shuffle[0:2000,-1]
+  train_split <- id_shuffle[2001:4000,-1]
+  
+  test_classes <- id_shuffle[0:2000,1]
+  train_classes <- id_shuffle[2001:4000,1]
+  
+  accuracy <- function(x){
+    sum(diag(x)/(sum(rowSums(x)))) * 100
+  }
+  id_test_prediction <- knn(train_split, test_split, train_classes, k=10)
+  confusion_matrix <- table(id_test_prediction, test_classes)
+  acc = accuracy(confusion_matrix)
+  aList[i] <- accuracy(confusion_matrix)
+  cat("Folder:",i ," Accuracy:",acc, "\n")
+}
+aList
+mean(aList)
+var(aList)
+# K=3:
+# 99.20 98.60 97.40 99.35 99.60 98.50 97.85 96.50 99.05 99.30
+# 98.535
+# 0.9994722
+# K=10:
+
+# all persons in
+id_train <- do.call(rbind, idList[1:10])
+dataset_shuffle <- id[sample(nrow(id)),]
+test_split <- dataset_shuffle[0:20000,-1]
+train_split <- dataset_shuffle[20001:40000,-1]
+test_classes <- dataset_shuffle[0:20000,1]
+train_classes <- dataset_shuffle[20001:40000,1]
+ret <- run_knn(train_split, test_split, train_classes, k=10)
+# K: 3  Accuracy: 98.03  Runtime: 4.366966
+
+# disjunct between persons
+id_train <- do.call(rbind, idList[1:5])
+id_train <- as.data.frame(id_train)
+id_train$V1 <- factor(id_train$V1)
+id_test <- do.call(rbind, idList[6:10])
+id_test <- as.data.frame(id_test)
+id_test$V1 <- factor(id_test$V1)
+
+test_split <- id_test[0:20000,-1]
+train_split <- id_train[0:20000,-1]
+test_classes <- id_test[0:20000,1]
+train_classes <- id_train[0:20000,1]
+ret <- run_knn(train_split, test_split, train_classes, k=10)
+# K: 3  Accuracy: 83.81  Runtime: 4.397083 (4min)
