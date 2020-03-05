@@ -14,23 +14,59 @@ train_classes <- dataset_shuffle[0:20000,1]
 test_classes <- dataset_shuffle[20001:40000,1]
 
 train_split.pca <- prcomp(train_split)
+summary(train_split.pca)
 comp_80 <- 15
 comp_90 <- 25
 comp_95 <- 36
 comp_99 <- 74
+
+# 80%
+train_split.pca <- prcomp(train_split, rank. = comp_80)
+test.pca <- predict(train_split.pca, test_split)
+
 pca_data <- train_split.pca$x
+predictions <- knn(pca_data, test.pca, train_classes, k=3)
 
-summary(train_split.pca)
-str(train_split.pca)
-
-#test.pca <- predict(train_split.pca, test_split)
-
-cm <- confusionMatrix(test_classes, )
-cm$table
-
+#confusion matrix
+cm <- confusionMatrix(test_classes, predictions)
 #accuracy
 sum(diag(cm$table))/sum(cm$table)*100
 
+# 90%
+train_split.pca <- prcomp(train_split, rank. = comp_90)
+test.pca <- predict(train_split.pca, test_split)
+
+pca_data <- train_split.pca$x
+predictions <- knn(pca_data, test.pca, train_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
+
+# 95%
+train_split.pca <- prcomp(train_split, rank. = comp_95)
+test.pca <- predict(train_split.pca, test_split)
+
+pca_data <- train_split.pca$x
+predictions <- knn(pca_data, test.pca, train_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
+
+# 99%
+train_split.pca <- prcomp(train_split, rank. = comp_99)
+test.pca <- predict(train_split.pca, test_split)
+
+pca_data <- train_split.pca$x
+predictions <- knn(pca_data, test.pca, train_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
 
 
 #PCA on Disjunct
@@ -43,13 +79,61 @@ id_test2$V1 <- factor(id_test2$V1)
 
 test2_split <- id_test2[0:20000,-1]
 train2_split <- id_train2[0:20000,-1]
+test2_classes <- id_test[0:20000,1]
+train2_classes <- id_train[0:20000,1]
 
 train2_split.pca <- prcomp(train2_split)
-
 summary(train2_split.pca)
-
 comp2_80 <- 14
 comp2_90 <- 24
 comp2_95 <- 35
 comp2_99 <- 75
 
+
+# 80%
+train2_split.pca <- prcomp(train2_split, rank. = comp2_80)
+test2.pca <- predict(train2_split.pca, test2_split)
+
+pca_data2 <- train2_split.pca$x
+predictions <- knn(pca_data2, test2.pca, train2_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test2_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
+
+# 90%
+train2_split.pca <- prcomp(train2_split, rank. = comp2_90)
+test2.pca <- predict(train2_split.pca, test2_split)
+
+pca_data2 <- train2_split.pca$x
+predictions <- knn(pca_data2, test2.pca, train2_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test2_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
+
+# 95%
+train2_split.pca <- prcomp(train2_split, rank. = comp2_95)
+test2.pca <- predict(train2_split.pca, test2_split)
+
+pca_data2 <- train2_split.pca$x
+predictions <- knn(pca_data2, test2.pca, train2_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test2_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
+
+# 99%
+train2_split.pca <- prcomp(train2_split, rank. = comp2_99)
+test2.pca <- predict(train2_split.pca, test2_split)
+
+pca_data2 <- train2_split.pca$x
+predictions <- knn(pca_data2, test2.pca, train2_classes, k=3)
+
+#confusion matrix
+cm <- confusionMatrix(test2_classes, predictions)
+#accuracy
+sum(diag(cm$table))/sum(cm$table)*100
