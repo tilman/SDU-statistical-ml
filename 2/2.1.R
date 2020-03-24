@@ -77,28 +77,64 @@ for(dataset in list(dataAllIn,dataDisjunct)){
   }
 }
 
-# 2.1.2 and 2.1.3 Results for alle Persons In:
-#
-# Variance threshold 80 % needs  15  PCA components. Proportional cumsum of the variance from all of them is: 0.8058439 
-# K: 3  Accuracy: 96.79  Runtime: 6.480006 
-# K: 7  Accuracy: 96.57  Runtime: 6.312029 
-# K: 12  Accuracy: 96.29  Runtime: 6.012458 
+# 2.1.2 and 2.1.3 Results:
+# 
+# Dataset split: All Persons In
+# 
+# Standard deviation (Components 0 to 10) 0.8688004 0.707551 0.6392667 0.5574933 0.5434544 0.4673228 0.4594847 0.3975414 0.3703828 0.3610791
+# Proportion of the Variance (Components 0 to 10) 0.1699586 0.1127246 0.09201684 0.06998137 0.06650118 0.04917418 0.04753848 0.03558507 0.03088907 0.02935674
+# Cumsum of the proportion of the Variance (Components 0 to 10) 0.1699586 0.2826832 0.3747 0.4446814 0.5111826 0.5603567 0.6078952 0.6434803 0.6743694 0.7037261
 # 
 # 
-# Variance threshold 90 % needs  25  PCA components. Proportional cumsum of the variance from all of them is: 0.9058394 
-# K: 3  Accuracy: 97.615  Runtime: 10.39099 
-# K: 7  Accuracy: 97.295  Runtime: 10.27383 
-# K: 12  Accuracy: 96.98  Runtime: 10.24507 
+# Variance threshold 80 % needs  15  PCA components. Proportional cumsum of the variance from all of them is: 0.8061658 
+# K: 3  Accuracy: 97.01  Runtime: 6.316975 
+# K: 7  Accuracy: 96.775  Runtime: 6.525208 
+# K: 12  Accuracy: 96.49  Runtime: 6.130448 
+# 
+# Variance threshold 90 % needs  25  PCA components. Proportional cumsum of the variance from all of them is: 0.905796 
+# K: 3  Accuracy: 97.72  Runtime: 10.35009 
+# K: 7  Accuracy: 97.43  Runtime: 10.10074 
+# K: 12  Accuracy: 97.125  Runtime: 10.59192 
+# 
+# Variance threshold 95 % needs  36  PCA components. Proportional cumsum of the variance from all of them is: 0.9508849 
+# K: 3  Accuracy: 97.915  Runtime: 24.41177 
+# K: 7  Accuracy: 97.545  Runtime: 24.39653 
+# K: 12  Accuracy: 97.225  Runtime: 21.28739 
+# 
+# Variance threshold 99 % needs  74  PCA components. Proportional cumsum of the variance from all of them is: 0.9901393 
+# K: 3  Accuracy: 97.955  Runtime: 53.18392 
+# K: 7  Accuracy: 97.53  Runtime: 51.94326 
+# K: 12  Accuracy: 97.165  Runtime: 52.11162 
 # 
 # 
-# Variance threshold 95 % needs  36  PCA components. Proportional cumsum of the variance from all of them is: 0.9509988 
-# K: 3  Accuracy: 97.7  Runtime: 21.17455 
-# K: 7  Accuracy: 97.445  Runtime: 22.58979 
-# K: 12  Accuracy: 97.045  Runtime: 22.51741 
 # 
 # 
-# Variance threshold 99 % needs  74  PCA components. Proportional cumsum of the variance from all of them is: 0.990089 
-# K: 3  Accuracy: 97.66  Runtime: 52.41418 
-# K: 7  Accuracy: 97.37  Runtime: 53.20585 
-# K: 12  Accuracy: 97.04  Runtime: 52.35225 
-
+# 
+# 
+# Dataset split: Disjunct
+# 
+# Standard deviation (Components 0 to 10) 0.6229586 0.5173791 0.4950781 0.4112954 0.2983075 0.2644365 0.2588353 0.2155745 0.1907695 0.1779427
+# Proportion of the Variance (Components 0 to 10) 0.2229243 0.1537648 0.1407947 0.09717326 0.05111725 0.04016816 0.03848452 0.02669523 0.02090533 0.01818859
+# Cumsum of the proportion of the Variance (Components 0 to 10) 0.2229243 0.3766891 0.5174838 0.614657 0.6657743 0.7059425 0.744427 0.7711222 0.7920275 0.8102161
+# 
+# 
+# Variance threshold 80 % needs  10  PCA components. Proportional cumsum of the variance from all of them is: 0.8102161 
+# K: 3  Accuracy: 93.85  Runtime: 0.045187 
+# K: 7  Accuracy: 94.3  Runtime: 0.046345 
+# K: 12  Accuracy: 94.4  Runtime: 0.0508101 
+# 
+# Variance threshold 90 % needs  18  PCA components. Proportional cumsum of the variance from all of them is: 0.9030284 
+# K: 3  Accuracy: 94.95  Runtime: 0.07384801 
+# K: 7  Accuracy: 94.45  Runtime: 0.08878803 
+# K: 12  Accuracy: 94.8  Runtime: 0.08113694 
+# 
+# Variance threshold 95 % needs  28  PCA components. Proportional cumsum of the variance from all of them is: 0.9516174 
+# K: 3  Accuracy: 95.3  Runtime: 0.1112211 
+# K: 7  Accuracy: 95.25  Runtime: 0.124707 
+# K: 12  Accuracy: 95.3  Runtime: 0.127069 
+# 
+# Variance threshold 99 % needs  60  PCA components. Proportional cumsum of the variance from all of them is: 0.9901545 
+# K: 3  Accuracy: 95.9  Runtime: 0.2792039 
+# K: 7  Accuracy: 95.75  Runtime: 0.285553 
+# K: 12  Accuracy: 95.5  Runtime: 0.290463
+# 
