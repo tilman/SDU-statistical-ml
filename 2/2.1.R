@@ -135,7 +135,7 @@ for(dataset in list(dataDisjunct)){
 # K: 12  Accuracy: 82.995  Runtime: 19.5195 
 # 
 # Variance threshold 99 % needs  75  PCA components. Proportional cumsum of the variance from all of them is: 0.9903329 
-# K: 3  Accuracy: 83.77  Runtime: 1.045857 
+# K: 3  Accuracy: 83.77  Runtime: 62.75142
 # K: 7  Accuracy: 83.595  Runtime: 57.43834 
 # K: 12  Accuracy: 83.095  Runtime: 1.049605 
 # 
