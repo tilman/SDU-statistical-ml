@@ -2,12 +2,13 @@ library(spatstat)
 library(class)
 library(caret)
 
-load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Lecture 1 - Exo 1/idList-co-100.rdata")
+#load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Lecture 1 - Exo 1/idList-co-100.rdata")
+load("/Users/Tilman/Downloads/idList-co-100.Rdata")
 
 set.seed(423)
 
 #PCA on All persons in
-dataset_shuffle <- id[sample(nrow(id)),]
+dataset_shuffle <- idList[sample(nrow(idList)),]
 train_split <- dataset_shuffle[0:20000,-1]
 test_split <- dataset_shuffle[20001:40000,-1]
 train_classes <- dataset_shuffle[0:20000,1]

@@ -13,9 +13,8 @@ accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 run_knn <- function(train_split, test_split, train_classes, k){
   start_time <- Sys.time()
   test_prediction <- knn(train_split,test_split,cl=train_classes,k)
-  confusion_matrix <- table(test_prediction, test_classes)
-  
   end_time <- Sys.time()
+  confusion_matrix <- table(test_prediction, test_classes)
   runtime = end_time - start_time
   acc = accuracy(confusion_matrix)
   cat("K:",k," Accuracy:",acc," Runtime:",runtime, "\n")
