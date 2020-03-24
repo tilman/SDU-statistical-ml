@@ -19,8 +19,10 @@ run_knn <- function(train_split, test_split, train_classes, test_classes, k){
 }
 minmax_norm <- function(train, test){
   for(i in c(1:ncol(train))){
-    train[,i] <- (train[,i] - min(train[,i])) / (max(train[,i]) - min(train[,i]))
-    test[,i] <- (test[,i] - min(train[,i])) / (max(train[,i]) - min(train[,i]))
+    #train[,i] <- (train[,i] - min(train[,i])) / (max(train[,i]) - min(train[,i]))
+    #test[,i] <- (test[,i] - min(train[,i])) / (max(train[,i]) - min(train[,i]))
+    train <- (train - min(train)) / (max(train) - min(train))
+    test <- (test - min(train)) / (max(train) - min(train))
   }
   res <- list(train=train, test=test)
   return(res)
