@@ -24,10 +24,10 @@ splitDisjunct <- function(data,title){
   id_test <- as.data.frame(id_test)
   id_test$V1 <- factor(id_test$V1)
   
-  test_split <- id_test[0:2000,-1]
-  train_split <- id_train[0:2000,-1]
-  test_classes <- id_test[0:2000,1]
-  train_classes <- id_train[0:2000,1]
+  test_split <- id_test[0:20000,-1]
+  train_split <- id_train[0:20000,-1]
+  test_classes <- id_test[0:20000,1]
+  train_classes <- id_train[0:20000,1]
   data <- list(test=test_split,train=train_split,test_labels=test_classes,train_labels=train_classes,title=title)
   return(data)
 }
@@ -46,7 +46,7 @@ run_knn <- function(train_split, test_split, train_classes, test_classes, k){
 
 dataAllIn <- splitAllIn(idList,title="All Persons In")
 dataDisjunct <- splitDisjunct(idList,title="Disjunct")
-for(dataset in list(dataAllIn,dataDisjunct)){
+for(dataset in list(dataDisjunct)){
   cat("\n\n Dataset split:",dataset$title)
   
   # 2.1.1: Show the standard deviation...
@@ -113,29 +113,29 @@ for(dataset in list(dataAllIn,dataDisjunct)){
 # 
 # 
 # Dataset split: Disjunct
+#
+# Standard deviation (Components 0 to 10) 0.7591435 0.6627278 0.6046395 0.492342 0.4858367 0.453112 0.4063359 0.3751744 0.3421654 0.3044527
+# Proportion of the Variance (Components 0 to 10) 0.1619149 0.1233984 0.1027146 0.06810402 0.0663162 0.05768332 0.0463884 0.03954625 0.03289358 0.02604226
+# Cumsum of the proportion of the Variance (Components 0 to 10) 0.1619149 0.2853133 0.3880278 0.4561318 0.522448 0.5801314 0.6265198 0.666066 0.6989596 0.7250019
+# Variance threshold 80 % needs  14  PCA components. Proportional cumsum of the variance from all of them is: 0.8030988 
+#
+#
+# K: 3  Accuracy: 78.27  Runtime: 5.582443 
+# K: 7  Accuracy: 78.565  Runtime: 5.95058 
+# K: 12  Accuracy: 78.48  Runtime: 5.657591 
 # 
-# Standard deviation (Components 0 to 10) 0.6229586 0.5173791 0.4950781 0.4112954 0.2983075 0.2644365 0.2588353 0.2155745 0.1907695 0.1779427
-# Proportion of the Variance (Components 0 to 10) 0.2229243 0.1537648 0.1407947 0.09717326 0.05111725 0.04016816 0.03848452 0.02669523 0.02090533 0.01818859
-# Cumsum of the proportion of the Variance (Components 0 to 10) 0.2229243 0.3766891 0.5174838 0.614657 0.6657743 0.7059425 0.744427 0.7711222 0.7920275 0.8102161
+# Variance threshold 90 % needs  24  PCA components. Proportional cumsum of the variance from all of them is: 0.9041168 
+# K: 3  Accuracy: 82.665  Runtime: 10.27751 
+# K: 7  Accuracy: 82.57  Runtime: 10.73692 
+# K: 12  Accuracy: 82.23  Runtime: 9.624222 
 # 
+# Variance threshold 95 % needs  35  PCA components. Proportional cumsum of the variance from all of them is: 0.9507284 
+# K: 3  Accuracy: 83.335  Runtime: 22.57845 
+# K: 7  Accuracy: 83.22  Runtime: 21.62002 
+# K: 12  Accuracy: 82.995  Runtime: 19.5195 
 # 
-# Variance threshold 80 % needs  10  PCA components. Proportional cumsum of the variance from all of them is: 0.8102161 
-# K: 3  Accuracy: 93.85  Runtime: 0.045187 
-# K: 7  Accuracy: 94.3  Runtime: 0.046345 
-# K: 12  Accuracy: 94.4  Runtime: 0.0508101 
-# 
-# Variance threshold 90 % needs  18  PCA components. Proportional cumsum of the variance from all of them is: 0.9030284 
-# K: 3  Accuracy: 94.95  Runtime: 0.07384801 
-# K: 7  Accuracy: 94.45  Runtime: 0.08878803 
-# K: 12  Accuracy: 94.8  Runtime: 0.08113694 
-# 
-# Variance threshold 95 % needs  28  PCA components. Proportional cumsum of the variance from all of them is: 0.9516174 
-# K: 3  Accuracy: 95.3  Runtime: 0.1112211 
-# K: 7  Accuracy: 95.25  Runtime: 0.124707 
-# K: 12  Accuracy: 95.3  Runtime: 0.127069 
-# 
-# Variance threshold 99 % needs  60  PCA components. Proportional cumsum of the variance from all of them is: 0.9901545 
-# K: 3  Accuracy: 95.9  Runtime: 0.2792039 
-# K: 7  Accuracy: 95.75  Runtime: 0.285553 
-# K: 12  Accuracy: 95.5  Runtime: 0.290463
+# Variance threshold 99 % needs  75  PCA components. Proportional cumsum of the variance from all of them is: 0.9903329 
+# K: 3  Accuracy: 83.77  Runtime: 1.045857 
+# K: 7  Accuracy: 83.595  Runtime: 57.43834 
+# K: 12  Accuracy: 83.095  Runtime: 1.049605 
 # 
