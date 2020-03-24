@@ -1,4 +1,5 @@
 rm(list = ls()) # clear/reset current environment
+dev.off() # clear plots
 library(spatstat)
 library(class)
 library(caret)
