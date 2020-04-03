@@ -118,10 +118,11 @@ par(mfrow=c(2,5),mar=c(2,2,2,2))
 # 2.4.2
 for(i in 1:10){
   rotated <- id_pca$rotation[,i]
-  rotated <- ((rotated - min(rotated)) / (max(rotated) - min(rotated)))
-  rotated <- means_0[i] * rotated
+  #rotated <- ((rotated - min(rotated)) / (max(rotated) - min(rotated)))
+  #rotated <- means_0[i] * rotated
   rotated <- ((rotated - min(rotated)) / (max(rotated) - min(rotated)))
   image <- matrix(rotated, nrow = imageSize, ncol = imageSize, byrow = FALSE)
   image <- rotate(image)
-  image( image, zlim=c(0,1), col=gray(0:100/100), main=capture.output(cat('score:',means_0[i])) )
+  image( image, zlim=c(0,1), col=gray(0:100/100), main=capture.output(cat(means_0[i],',',means_1[i])) )
 }
+
