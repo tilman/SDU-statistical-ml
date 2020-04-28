@@ -6,7 +6,6 @@ library(caret)
 load("/Users/Tilman/Downloads/idList-corner-100-new.Rdata")
 #load("/Users/Tilman/Downloads/idList-co-100.Rdata")
 
-
 accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 run_knn <- function(train_split, test_split, train_classes, test_classes, k){
   start_time <- Sys.time()
@@ -66,7 +65,7 @@ id_train_labels <- id_train[,1]
 set.seed(2345)
 accs <- c()
 runtimes <- c()
-for(l in c(10,20,30,50,75,100,150,200,250,350,400)){
+for(l in c(10,20,30,50,75,100,150,200,300,400)){
   ret <- run_kmeans_knn(l,id_train,id_train_labels,id_test,id_test_labels)
   accs[l] = ret$Accuracy
   runtimes[l] = ret$Runtime
@@ -76,7 +75,7 @@ baseline <- run_knn(id_train[0:4000,-1], id_test[0:4000,-1], id_train_labels, id
 # => K: 3  Accuracy: 35.8  Runtime: 12.05315 
 
 # 3.1.2
-plot(accs,ylab="Accuracy",ylim=c(min(accs,na.rm = TRUE)-0.5,baseline$Accuracy+0.5),xlab="# Clusters",main="baseline accuracy in red based on raw data")
+plot(accs_1,ylab="Accuracy",ylim=c(min(accs,na.rm = TRUE)-0.5,baseline$Accuracy+0.5),xlab="# Clusters",main="baseline accuracy in red based on raw data")
 abline(h=baseline$Accuracy, col = "red")
 plot(runtimes,ylab="Runtime",ylim=c(0.0001,baseline$Runtime+0.5),xlab="# Clusters",main="baseline runtime in red based on raw data")
 abline(h=baseline$Runtime, col = "red")
