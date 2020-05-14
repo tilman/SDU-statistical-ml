@@ -12,13 +12,14 @@ labels <- id[,1]
 set.seed(423)
 dataset_shuffle <- id[sample(nrow(id)),]
 
-acc <- c()
-i <- 1
+
 train_split <- dataset_shuffle[0:3000,]
 test_split <- dataset_shuffle[3001:4000,]
 
+acc <- c()
+i <- 7
 classifier <- ksvm(train_split[,1]~., data = train_split,
-                   kernel ="vanilladot")
+                   kernel ="anovadot")
 
 prediction <- predict(classifier,test_split)
 
@@ -27,4 +28,10 @@ prop.table(table(agreement))
 
 acc[i] <- prop.table(table(agreement))[2]
 
-barplot(c)
+barplot(c("vanilladot","rbfdot","polydot","tanhdot","laplacedot",
+          "besseldot","anovadot"))
+
+plot(c(1,2,3,4,5,6,7),acc,
+     main = "Accuracy change depending on the type of kernel",
+     xlab = "kernel",
+     ylab = "accuracy")
