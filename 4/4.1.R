@@ -79,8 +79,8 @@ legend(-1.6, 1, PCs, cex=0.8, col=colors, pch=21:22, lty=1:5)
 
 # 4.1.2
 pca_res <- prcomp(id[,-1], rank. = 5)
-dataAndLabels <- data.frame(label = id[,1], pca_res$x)
-#dataAndLabels <- data.frame(label = id[,1], id[,-1])
+#dataAndLabels <- data.frame(label = id[,1], pca_res$x)
+dataAndLabels <- data.frame(label = id[,1], id[,-1])
 tree <- rpart(dataAndLabels$label ~ .,method = "class", data = dataAndLabels)
 rpart.plot(tree,type = 4, extra = 100, box.palette = "RdYlGn")
 #fancyRpartPlot(tree)
