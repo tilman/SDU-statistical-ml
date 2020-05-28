@@ -6,7 +6,7 @@ library(caret)
 library(rpart)
 library(rattle)
 library(rpart.plot)
-load("/Users/Tilman/Downloads/id100.Rda")
+load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Lecture 1 - Exo 1/id100.rda")
 
 dataset <- id[,-1]
 labels <- id[,1]
@@ -86,4 +86,18 @@ rpart.plot(tree,type = 4, extra = 100, box.palette = "RdYlGn")
 #fancyRpartPlot(tree)
 
 
+# 4.1.3
+load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Lecture 1 - Exo 1/idList-co-100.rdata")
+id <- do.call(rbind, idList[1:10])
+id <- as.data.frame(id)
 
+accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
+
+
+accs <- c(1:5)
+folds <- createFolds(id$V1, k=5) 
+for (i in 1:5) {
+  train_split <- id[-folds[[i]],]
+  test_split <- id[folds[[i]],]
+  tree<-
+}
