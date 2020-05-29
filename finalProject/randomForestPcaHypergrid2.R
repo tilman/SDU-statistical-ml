@@ -6,7 +6,6 @@ library(caret)
 library(rpart)
 set.seed(423)
 
-#load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Lecture 1 - Exo 1/idList-co-100.rdata")
 load("/Users/Tilman/Downloads/idList-corner-100-new.Rdata")
 accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 getDisjunct <- function(split){

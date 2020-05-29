@@ -14,7 +14,8 @@ dev.off() # clear plots
 # * fast test, train time does not matter that much
 # * high acc
 # HW: google colab CPU instance with 1 core Intel Xeon @2.30GHz and hyperthreading
-# 2 colabs in parallel, one started at 10 pca comps, the other started at 120 PCA Components.
+# 4 colabs in parallel, one started at 10 pca comps, the other started at 120 PCA Components.
+# + 4 kaggle in prallel
 
 # first iteration on the hypergrid canceled after:
 
@@ -39,19 +40,18 @@ dev.off() # clear plots
 #load('/Volumes/GoogleDrive/Meine\ Ablage/machine_learning/R/sdu_stats_ml/hypergrid_results.RData')
 
 load('/Volumes/GoogleDrive/Meine\ Ablage/machine_learning/R/sdu_stats_ml/hypergrid_results_450-900_28052020.RData')
-load('/Volumes/GoogleDrive/Meine\ Ablage/machine_learning/R/sdu_stats_ml/hypergrid_results_0-450_28052020.RData')
+load('/Volumes/GoogleDrive/Meine\ Ablage/machine_learning/R/sdu_stats_ml/hypergrid_results_0-450_28052020.RData') #done bis 350
+load('/Volumes/GoogleDrive/Meine\ Ablage/machine_learning/R/sdu_stats_ml/hypergrid_results_650-700_28052020.RData')
 load('/Volumes/GoogleDrive/Meine\ Ablage/machine_learning/R/sdu_stats_ml/hypergrid_results_350-450_28052020.RData')
 load("/Users/Tilman/Downloads/hypergrid_results_700-750_28052020.RData")
 load("/Users/Tilman/Downloads/hypergrid_results_750-800_28052020.RData")
 load("/Users/Tilman/Downloads/hypergrid_results_800-850_28052020.RData")
 load("/Users/Tilman/Downloads/hypergrid_results_850-900_28052020.RData")
+#load("/Users/Tilman/Downloads/hypergrid_results_850-900_28052020 (1).RData")
+#load("/Users/Tilman/Downloads/hypergrid_results_800-850_28052020 (1).RData")
+#load("/Users/Tilman/Downloads/hypergrid_results_750-800_28052020 (1).RData")
+#load("/Users/Tilman/Downloads/hypergrid_results_700-750_28052020 (1).RData")
 
-
-
-
-length(res1)
-length(res2)
-length(res3)
 #resId <- do.call(rbind, res[[8]])
 #resId <- do.call(rbind, c(res1[1:450],res2[451:749],res3[750:900]))
 resId <- do.call(rbind, c(res1[1:349],res8[350:449],res2[450:650],res3[650:699],res4[700:749],res5[750:799],res6[800:849],res7[850:899]))
@@ -78,62 +78,101 @@ resId$time_rfTestDuration = do.call(rbind, resId$time_rfTestDuration)
 
 
 
-#cat("PCA Components:",resId$pca_count[1],"\n")
-cat("Total Runtime:",sum(resId$time_pcaTrainDuration) + sum(resId$time_rfTrainDuration))
+cat("Total Runtime:",sum(resId$time_pcaTrainDuration) + sum(resId$time_rfTrainDuration)) #47h 53m
 cat("Max accuracy:",max(resId$acc)) #83.71471
+cat("Best combination:")
+print(resId[resId$acc == max(resId$acc),c(2:7,9)])
 #theme = theme_bw()
 theme = NULL
 
 
 FILEPATH = "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/RandomForest/hypergrid/plots/"
-FILENAME = "run2_28052020_"
+FILENAME = "run3_28052020_"
 FORMAT = "pdf"
-SAVE = FALSE
+SAVE = TRUE
 setwd(FILEPATH)
+
 
 ggplot(resId)+geom_point(aes(x=pca,y=acc))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_acc",".",FORMAT,sep = ""),device = FORMAT)
 ggplot(data = resId, aes(pca,acc,fill=pca)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=pca))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(pca,time_rfTrainDuration,fill=pca)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"pca_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=pca))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_testDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(pca,time_rfTestDuration,fill=pca)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"pca_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
+
 
 ggplot(resId)+geom_point(aes(x=nodesize,y=acc))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_acc",".",FORMAT,sep = ""),device = FORMAT)
 ggplot(data = resId, aes(nodesize,acc,fill=nodesize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(nodesize,time_rfTrainDuration,fill=nodesize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_testDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(nodesize,time_rfTestDuration,fill=nodesize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
+
 
 ggplot(resId)+geom_point(aes(x=mtry,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_acc",".",FORMAT,sep = ""),device = FORMAT)
 ggplot(data = resId, aes(mtry,acc,fill=mtry)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=mtry))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(mtry,time_rfTrainDuration,fill=mtry)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"mtry_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=mtry))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_testDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(mtry,time_rfTestDuration,fill=mtry)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"mtry_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
+
 
 ggplot(resId)+geom_point(aes(x=sampsize,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_acc",".",FORMAT,sep = ""),device = FORMAT)
 ggplot(data = resId, aes(sampsize,acc,fill=sampsize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=sampsize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(sampsize,time_rfTrainDuration,fill=sampsize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=sampsize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_testDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(sampsize,time_rfTestDuration,fill=sampsize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=ntree,y=acc,color=nodesize))+theme
+
+
+ggplot(resId)+geom_point(aes(x=ntree,y=acc,color=nodesize)) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_acc",".",FORMAT,sep = ""),device = FORMAT)
 ggplot(data = resId, aes(ntree,acc,fill=ntree)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=ntree))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(ntree,time_rfTrainDuration,fill=ntree)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"ntree_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+
 ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=ntree))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_testDuration",".",FORMAT,sep = ""),device = FORMAT)
-
+ggplot(data = resId, aes(ntree,time_rfTestDuration,fill=ntree)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"ntree_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
