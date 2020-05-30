@@ -1,0 +1,90 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Statistical Machine Learning Final Project\\
+    {\large solved with RandomForest and ...}
+}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Tilman Marquart}
+\IEEEauthorblockA{\textit{Computer Science Bachelor} \\
+\textit{SDU Exchange Student}\\
+Nuremberg, Germany \\
+timar20@student.sdu.dk}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+}
+
+\maketitle
+
+\begin{abstract}
+final project abstract, use random forest and ...
+\end{abstract}
+
+\section{Introduction}
+Give a brief intuitive summary of the two chosen classification algorithms. Identify the critical parameters.
+
+Talk about random forest with PCA. => critical hyperparams: PCA, NTREE, MTRY, NODESIZE, SAMPSIZE
+
+\subsection{Dataset}
+why corner and not mid? => on a visual inspection corner seemed to be better centered and the digits better captured
+
+\section{Preprocessing}
+Describe your preprocessing (dpi, PCA, centering, smoothing, normalization). Also show images.
+
+\subsubsection{Random Forest Preprocessing}
+why image wise min max norm? => some images with low saturation, digits probably written with a bright pencil
+why 100 dpi? => one goal was to be fast, small image size will increase fastness
+
+\subsection{Hyper parameter Optimization}
+Optimize critical parameters (discussed under 1) on a smaller set and document this optimization process.
+
+\subsubsection{Random Forest}
+problem: on a smaller set!!! => maybe say smaller set was 30people and use crossvalidation with 43 to 4 with bigger set => argue why 30people was not a problem, because of colab and kaggle we choose 30people and let it run over night
+
+explain grid search for: PCA, NTREE, MTRY, NODESIZE, SAMPSIZE
+=> manual hyperparam optimization (by interpreting grid search barplots)
+=> preprocess optimization (by using image wise min-max norm)
+(remeber: Give information about the computational time required.)
+
+
+\section{Evaluation}
+Do a proper cross validation and indicate also mean and variances for all problems. Describe results on test and trainings set and reflect on overfitting. 
+(remeber: Give information about the computational time required.)
+(remeber: Analyze the results and give proper explanations)
+
+
+
+
+\subsection{Random Forest}
+=> use 10 fold crossvalidation with 43 to 4 with bigger set
+
+(remeber: Give information about the computational time required.)
+(remeber: Analyze the results and give proper explanations)
+\section{Future Work}
+Give an indication what could be further improved. 
+
+
+\begin{thebibliography}{00}
+\end{thebibliography}
+
+\end{document}
