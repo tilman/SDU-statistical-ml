@@ -1,5 +1,5 @@
 rm(list = ls()) # clear/reset current environment
-dev.off() # clear plots
+#dev.off() # clear plots
 
 # since finding the hyperparameters is an tedious task and we wanted to try out a lot of variations to find the fastest and best for the randomforest and the pca,
 # we created an hyper parameter grid and tried out 12480 combinations of the following hyper params:
@@ -83,96 +83,103 @@ cat("Max accuracy:",max(resId$acc)) #83.71471
 cat("Best combination:")
 print(resId[resId$acc == max(resId$acc),c(2:7,9)])
 #theme = theme_bw()
+#theme = theme(theme(legend.position = "bottom"))
 theme = NULL
 
 
 FILEPATH = "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/RandomForest/hypergrid/plots/"
-FILENAME = "run3_28052020_"
+FILENAME = "final_run_28052020_"
 FORMAT = "pdf"
 SAVE = TRUE
+ALPHA_BOX = 0.06
+ALPHA_POINT = 0.3
+ALPHA_COLOR_POINT = 0.6
+POINT_SIZE = 0.8
+BOX_POINT_SIZE = 0.8
+BOX_SIZE = 0.4
 setwd(FILEPATH)
 
 
-ggplot(resId)+geom_point(aes(x=pca,y=acc))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_POINT, aes(x=pca,y=acc))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_acc",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(pca,acc,fill=pca)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(pca,acc,fill=pca)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=pca))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTrainDuration,y=acc,color=pca))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(pca,time_rfTrainDuration,fill=pca)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(pca,time_rfTrainDuration,fill=pca)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=pca))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTestDuration,y=acc,color=pca))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_testDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(pca,time_rfTestDuration,fill=pca)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(pca,time_rfTestDuration,fill=pca)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"pca_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
 
 
-ggplot(resId)+geom_point(aes(x=nodesize,y=acc))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_POINT, aes(x=nodesize,y=acc))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_acc",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(nodesize,acc,fill=nodesize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(nodesize,acc,fill=nodesize)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=nodesize))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTrainDuration,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(nodesize,time_rfTrainDuration,fill=nodesize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(nodesize,time_rfTrainDuration,fill=nodesize)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=nodesize))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTestDuration,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_testDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(nodesize,time_rfTestDuration,fill=nodesize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(nodesize,time_rfTestDuration,fill=nodesize)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"nodesize_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
 
 
-ggplot(resId)+geom_point(aes(x=mtry,y=acc,color=nodesize))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_POINT, aes(x=mtry,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_acc",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(mtry,acc,fill=mtry)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(mtry,acc,fill=mtry)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=mtry))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTrainDuration,y=acc,color=mtry))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(mtry,time_rfTrainDuration,fill=mtry)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(mtry,time_rfTrainDuration,fill=mtry)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=mtry))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTestDuration,y=acc,color=mtry))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_testDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(mtry,time_rfTestDuration,fill=mtry)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(mtry,time_rfTestDuration,fill=mtry)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"mtry_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
 
 
-ggplot(resId)+geom_point(aes(x=sampsize,y=acc,color=nodesize))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_POINT, aes(x=sampsize,y=acc,color=nodesize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_acc",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(sampsize,acc,fill=sampsize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(sampsize,acc,fill=sampsize)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=sampsize))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTrainDuration,y=acc,color=sampsize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(sampsize,time_rfTrainDuration,fill=sampsize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(sampsize,time_rfTrainDuration,fill=sampsize)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=sampsize))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTestDuration,y=acc,color=sampsize))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_testDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(sampsize,time_rfTestDuration,fill=sampsize)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(sampsize,time_rfTestDuration,fill=sampsize)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"sampsize_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
 
 
-ggplot(resId)+geom_point(aes(x=ntree,y=acc,color=nodesize)) + theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_POINT, aes(x=ntree,y=acc,color=nodesize)) + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_acc",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(ntree,acc,fill=ntree)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(ntree,acc,fill=ntree)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_acc_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTrainDuration,y=acc,color=ntree))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTrainDuration,y=acc,color=ntree))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_trainDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(ntree,time_rfTrainDuration,fill=ntree)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
-if(SAVE) ggsave(filename = paste(FILENAME,"ntree_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
+ggplot(data = resId, aes(ntree,time_rfTrainDuration,fill=ntree)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
+if(SAVE) ggsave(filename = paste(FILENAME,"ntree_trainDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 
-ggplot(resId)+geom_point(aes(x=time_rfTestDuration,y=acc,color=ntree))+theme
+ggplot(resId)+geom_point(size=POINT_SIZE,alpha=ALPHA_COLOR_POINT, aes(x=time_rfTestDuration,y=acc,color=ntree))+theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_testDuration",".",FORMAT,sep = ""),device = FORMAT)
-ggplot(data = resId, aes(ntree,time_rfTestDuration,fill=ntree)) + geom_boxplot()+geom_jitter(width=0,alpha=0.15) + theme
+ggplot(data = resId, aes(ntree,time_rfTestDuration,fill=ntree)) + geom_boxplot(size=BOX_SIZE,coef = 500)+geom_point(size=BOX_POINT_SIZE, alpha=ALPHA_BOX)+theme(legend.position = "none") + theme
 if(SAVE) ggsave(filename = paste(FILENAME,"ntree_testDuration_barplot",".",FORMAT,sep = ""),device = FORMAT)
 

@@ -10,14 +10,15 @@ set.seed(423)
 
 
 load("/Users/Tilman/Downloads/idList-corner-100-new.Rdata") #orig
-load("/Users/Tilman/Downloads/idList-mid-100-new.Rdata")
+#load("/Users/Tilman/Downloads/idList-mid-100-new.Rdata")
+#load("/Users/Tilman/Downloads/idList-corner-200-new.Rdata") #orig
 accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 
 minmaxNorm <- function(line){
   return((line - min(line)) / (max(line)-min(line)))
 }
-getDisjunctNormed <- function(split){
-  id <- do.call(rbind, idList)
+getDisjunctNormed <- function(split, datasetSize){
+  id <- do.call(rbind, idList[datasetSize])
   id <- as.data.frame(id)
   sapply(id, class)
   id<-transform(id, V1=as.factor(V1)) #needed so we have a categorization not a regression problem
@@ -42,8 +43,8 @@ getDisjunctNormed <- function(split){
     test  = list(data = test_data,  labels = test_labels)
   ))
 }
-getAllInNormed <- function(split){
-  id <- do.call(rbind, idList)
+getAllInNormed <- function(split, datasetSize){
+  id <- do.call(rbind, idList[datasetSize])
   id <- as.data.frame(id)
   
   sapply(id, class)
@@ -78,7 +79,7 @@ timerEnd <- function(point){
 }
 
 #dataset <- getAllInNormed(0.63829) #30 person train, 17 test
-dataset <- getDisjunctNormed(0.63829) #30 person train, 17 test
+dataset <- getDisjunctNormed(0.63829,1:47) #30 person train, 17 test
 train = dataset$train
 test = dataset$test
 
@@ -107,10 +108,17 @@ test = dataset$test
 
 # 5 Try z-norm, over all comps
 
+# PCA Hiscores:
+# 100dpi, 29.26388s train, 3.693782 test for all.
+# 100dpi, 27.88836  train, 3.502278 test for 40 PCs.
+# 200dpi, 575.5289  train, 85.80151 test for 40 PCs.
+timerStart("PCA TRAIN")
+pca_res <- prcomp(train$data, .rank=PCA)
+time_rfTrainDuration <- timerEnd("")
+timerStart("PCA TEST")
+pca_pred <- predict(pca_res, test$data, .rank=PCA)
+time_rfTrainDuration <- timerEnd("")
 
-
-pca_res <- prcomp(train$data)
-pca_pred <- predict(pca_res, test$data)
 
 #Hiscore:
 #Final hypers with 4
@@ -152,11 +160,30 @@ SAMPSIZE = 58000 #stable
 # getAllInNormed(0.63829):
 # Acc: 87.90294  Train time: 133.6811  Test time: 7.910317 (acc decreased 5,92941% on mid in respect to corner+norm)
 
+#PCA = 40 #try1 40 - 60
+#NTREE = 200 #ab 200 fast stable, 300 wenig besser
+#MTRY = 4 #try3 4-8, aber relativ stablil
+#NODESIZE = 5 #try2 bis 1
+#SAMPSIZE = 58000 #stable
+# normed (image wise) + corner + faster params:
+# getDisjunctNormed(0.63829):
+# Acc: 85.70882  Train time: 127.8839  Test time: 6.348983 (acc improved 1,87941% with norm)
+# getAllInNormed(0.63829):
+# Acc: 93.83235  Train time: 129.8509  Test time: 7.377851 (acc improved 0,1147% with norm)
+
+
+PCA = 40 #try1 40 - 60
+NTREE = 300 #ab 200 fast stable, 300 wenig besser
+MTRY = 4 #try3 4-8, aber relativ stablil
+NODESIZE = 5 #try2 bis 1
+#SAMPSIZE = 58000 #stable
+#Acc: 85.65882  Train time: 130.3742  Test time: 5.624332
+
 
 {
   #TRAINING
   timerStart("RF TRAIN")
-  rf <- randomForest(train$labels ~ ., data = pca_res$x[,0:PCA], ntree = NTREE, mtry = MTRY, nodesize = NODESIZE, sampsize = SAMPSIZE)
+  rf <- randomForest(train$labels ~ ., data = pca_res$x[,0:PCA], ntree = NTREE, mtry = MTRY, nodesize = NODESIZE)#, sampsize = SAMPSIZE)
   time_rfTrainDuration <- timerEnd("")
   
   #TESTING
