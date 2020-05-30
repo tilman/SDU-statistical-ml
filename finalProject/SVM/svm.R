@@ -79,86 +79,26 @@ timerEnd <- function(point){
   return(diff)
 }
 
-#dataset <- getAllInNormed(0.63829) #30 person train, 17 test
-dataset <- getDisjunctNormed(0.63829, 0:5) #30 person train, 17 test
+#dataset <- getAllInNormed(0.63829, 0:47) #30 person train, 17 test
+dataset <- getDisjunctNormed(0.63829, 0:47) #30 person train, 17 test
 train = dataset$train
 test = dataset$test
-
-
-# 1 Try min-max norm, over all comps
-#min_train <- min(train$data)
-#minmax_train <- (max(train$data) - min(train$data))
-#train$data <- (train$data - min_train) / minmax_train
-#test$data <- (test$data - min_train) / minmax_train #!important to norm test with train, other is not possible in reallife!
-
-# 2 Try min-max norm, component wise
-#!important to norm test with train, other is not possible in reallife!
-#for(i in 1:ncol(train$data)) test$data[i] <- (test$data[i] - min(train$data[i])) / (max(train$data[i])-min(train$data[i]))
-#for(i in 1:ncol(train$data)) train$data[i] <- (train$data[i] - min(train$data[i])) / (max(train$data[i])-min(train$data[i]))
-
-# 3 Try min-max norm, image wise => moved to loading
-#!important to norm test with train, other is not possible in reallife!
-#for(i in 1:nrow(train$data)) train$data[i,] <- (train$data[i,] - min(train$data[i,])) / (max(train$data[i,])-min(train$data[i,]))
-#for(i in 1:nrow(test$data)) test$data[i,] <- (test$data[i,] - min(test$data[i,])) / (max(test$data[i,])-min(test$data[i,]))
-
-# 4 first #3, then #2
-#for(i in 1:nrow(train$data)) train$data[i,] <- (train$data[i,] - min(train$data[i,])) / (max(train$data[i,])-min(train$data[i,]))
-#for(i in 1:nrow(test$data)) test$data[i,] <- (test$data[i,] - min(test$data[i,])) / (max(test$data[i,])-min(test$data[i,]))
-#for(i in 1:ncol(train$data)) test$data[i] <- (test$data[i] - min(train$data[i])) / (max(train$data[i])-min(train$data[i]))
-#for(i in 1:ncol(train$data)) train$data[i] <- (train$data[i] - min(train$data[i])) / (max(train$data[i])-min(train$data[i]))
-
-# 5 Try z-norm, over all comps
-
-
 
 pca_res <- prcomp(train$data)
 pca_pred <- predict(pca_res, test$data)
 
 #Hiscore:
-#Final hypers with 4
-PCA = 40 #try1 40 - 60
-NTREE = 300 #ab 200 fast stable, 300 wenig besser
-MTRY = 4 #try3 4-8, aber relativ stablil
-NODESIZE = 5 #try2 bis 1
-SAMPSIZE = 58000 #stable
-#Acc: 83.82941  Train time: 133.2597  Test time: 8.204128
-
-# 1: Try min-max norm, over all comps
-#Acc: 83.42941  Train time: 124.6357  Test time: 6.744413
-# 2: Try min-max norm, component wise
-#Acc: 71.84412  Train time: 142.3847  Test time: 8.287076
-# 3: Try min-max norm, image wise
-#Acc: 85.73824  Train time: 124.0188  Test time: 7.470023> 
-# 4: first #3, then #2
-#Acc: 85.57353  Train time: 125.5589  Test time: 7.533212
-# 5: move image wise norm to loader function (t(apply(...)))
-# Acc: 85.69706  Train time: 126.461  Test time: 9.109428
-
-
-# FINAL (with new split technique)
-# no norm + corner:
-# getDisjunctNormed(0.63829):
-# Acc: 83.82941  Train time: 133.2597  Test time: 8.204128
-# getAllInNormed(0.63829):
-# Acc: 93.71765  Train time: 125.7874  Test time: 7.498511
-
-# normed (image wise) + corner:
-# getDisjunctNormed(0.63829):
-# Acc: 85.70882  Train time: 127.8839  Test time: 6.348983 (acc improved 1,87941% with norm)
-# getAllInNormed(0.63829):
-# Acc: 93.83235  Train time: 129.8509  Test time: 7.377851 (acc improved 0,1147% with norm)
-
-# normed + mid:
-# getDisjunctNormed(0.63829):
-# Acc: 77.33235  Train time: 139.4109  Test time: 7.707785 (acc decreased 8,37647% on mid in respect to corner+norm)
-# getAllInNormed(0.63829):
-# Acc: 87.90294  Train time: 133.6811  Test time: 7.910317 (acc decreased 5,92941% on mid in respect to corner+norm)
+#1
+PCA = 60
+C = 10
+KERNEL = "vanilladot"
+# Acc: 80.87059  Train time: 1264.421  Test time: 2.044616
 
 {
   #TRAINING
   timerStart("RF TRAIN")
   #svm_res <- ksvm(x=train$data, y=train$labels, scaled=FALSE, kernel="vanilladot", C=1)
-  svm_res <- ksvm(x=pca_res$x[,0:PCA], y=train$labels, kernel="polydot")
+  svm_res <- ksvm(x=pca_res$x[,0:PCA], y=train$labels, kernel=KERNEL, C=C)
   print(svm_res) 
   time_rfTrainDuration <- timerEnd("")
   
