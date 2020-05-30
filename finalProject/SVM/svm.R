@@ -5,30 +5,21 @@ library(class)
 library(caret)
 library(rpart)
 library(furrr)
+library(ggplot2)
+library(kernlab)
+library(caTools)
 
 set.seed(423)
 
-load("/Users/Tilman/Downloads/idList-corner-100-new.Rdata")
+
+load("/Users/Tilman/Downloads/idList-corner-100-new.Rdata") #orig
 accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 
 minmaxNorm <- function(line){
   return((line - min(line)) / (max(line)-min(line)))
 }
-# getDisjunctNormed <- function(split){
-#   id <- do.call(rbind, idList)
-#   id <- as.data.frame(id)
-#   #id <- t(apply(id, 1, minmaxNorm))
-#   #id <- as.data.frame(id)
-#   sapply(id, class)
-#   id<-transform(id, V1=as.factor(V1)) #needed so we have a categorization not a regression problem
-#   dataset_shuffle <- id[sample(nrow(id)),]
-#   data <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
-#   #data <- dataset_shuffle[,-1]
-#   labels <- dataset_shuffle[,1]
-#   return(list(data=data, labels=labels))
-# }
-getDisjunctNormed <- function(split){
-  id <- do.call(rbind, idList)
+getDisjunctNormed <- function(split, datasetSize){
+  id <- do.call(rbind, idList[datasetSize])
   id <- as.data.frame(id)
   sapply(id, class)
   id<-transform(id, V1=as.factor(V1)) #needed so we have a categorization not a regression problem
@@ -53,16 +44,15 @@ getDisjunctNormed <- function(split){
     test  = list(data = test_data,  labels = test_labels)
   ))
 }
-
-getAllInNormed <- function(split){
-  id <- do.call(rbind, idList)
+getAllInNormed <- function(split,datasetSize){
+  id <- do.call(rbind, idList[datasetSize])
   id <- as.data.frame(id)
   
   sapply(id, class)
   id<-transform(id, V1=as.factor(V1)) #needed so we have a categorization not a regression problem
   
   dataset_shuffle <- id[sample(nrow(id)),]
-  dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+  #dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
   
   split_point <- nrow(dataset_shuffle)*split
   
@@ -89,8 +79,8 @@ timerEnd <- function(point){
   return(diff)
 }
 
-#getAllInNormed
-dataset <- getAllInNormed(0.63829) #30 person train, 17 test
+#dataset <- getAllInNormed(0.63829) #30 person train, 17 test
+dataset <- getDisjunctNormed(0.63829, 0:5) #30 person train, 17 test
 train = dataset$train
 test = dataset$test
 
@@ -146,24 +136,39 @@ SAMPSIZE = 58000 #stable
 
 
 # FINAL (with new split technique)
+# no norm + corner:
 # getDisjunctNormed(0.63829):
-# Acc: 85.70882  Train time: 127.8839  Test time: 6.348983
+# Acc: 83.82941  Train time: 133.2597  Test time: 8.204128
 # getAllInNormed(0.63829):
-# Acc: 93.83235  Train time: 129.8509  Test time: 7.377851
+# Acc: 93.71765  Train time: 125.7874  Test time: 7.498511
+
+# normed (image wise) + corner:
+# getDisjunctNormed(0.63829):
+# Acc: 85.70882  Train time: 127.8839  Test time: 6.348983 (acc improved 1,87941% with norm)
+# getAllInNormed(0.63829):
+# Acc: 93.83235  Train time: 129.8509  Test time: 7.377851 (acc improved 0,1147% with norm)
+
+# normed + mid:
+# getDisjunctNormed(0.63829):
+# Acc: 77.33235  Train time: 139.4109  Test time: 7.707785 (acc decreased 8,37647% on mid in respect to corner+norm)
+# getAllInNormed(0.63829):
+# Acc: 87.90294  Train time: 133.6811  Test time: 7.910317 (acc decreased 5,92941% on mid in respect to corner+norm)
 
 {
   #TRAINING
   timerStart("RF TRAIN")
-  rf <- randomForest(train$labels ~ ., data = pca_res$x[,0:PCA], ntree = NTREE, mtry = MTRY, nodesize = NODESIZE, sampsize = SAMPSIZE)
+  #svm_res <- ksvm(x=train$data, y=train$labels, scaled=FALSE, kernel="vanilladot", C=1)
+  svm_res <- ksvm(x=pca_res$x[,0:PCA], y=train$labels, kernel="polydot")
+  print(svm_res) 
   time_rfTrainDuration <- timerEnd("")
   
   #TESTING
   timerStart("RF TEST")
-  rf_pred <- predict(rf, pca_pred)
+  svm_pred <- predict(svm_res, newdata = pca_pred[,0:PCA], type = "response")
   time_rfTestDuration <- timerEnd("")
   
   #EVAL
-  cm<-table(rf_pred, test$labels)
+  cm<-table(svm_pred, test$labels)
   acc <- accuracy(cm)
   cat("Acc:",acc," Train time:",time_rfTrainDuration," Test time:",time_rfTestDuration)
 }
