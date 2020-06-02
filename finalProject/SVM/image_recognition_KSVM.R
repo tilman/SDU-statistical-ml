@@ -39,12 +39,12 @@ load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList
     test_shuffle <- test[sample(nrow(test)),]
     
     # without minmax norm : 
-    train_data <- train_shuffle[,-1]
-    test_data <- test_shuffle[,-1]
+    #train_data <- train_shuffle[,-1]
+    #test_data <- test_shuffle[,-1]
     
     # with minmax norm :
-    #train_data <- t(apply(train_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
-    #test_data <- t(apply(test_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+    train_data <- t(apply(train_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+    test_data <- t(apply(test_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
     
     train_labels <- train_shuffle[,1]
     test_labels <- test_shuffle[,1]
@@ -64,7 +64,7 @@ load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList
     dataset_shuffle <- id[sample(nrow(id)),]
     
     # minmax norm : 
-    #dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm))
+    dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm))
     
     split_point <- nrow(dataset_shuffle)*split
     
@@ -107,11 +107,11 @@ load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList
 # Full dataset :
 
 #dataset <- getAllInNormed(0.63829, 0:47) #30 person train, 17 test
-#dataset <- getDisjunctNormed(0.63829, 0:47) #30 person train, 17 test
+dataset <- getDisjunctNormed(0.63829, 0:47) #30 person train, 17 test
 
 # Reduced version for test :
 
-dataset <- getAllInNormed(0.625, 0:8) #5 person train, 3 test
+#dataset <- getAllInNormed(0.625, 0:8) #5 person train, 3 test
 #dataset <- getDisjunctNormed(0.625, 0:8) #5 person train, 3 test
 
 
@@ -123,8 +123,8 @@ pca_res <- prcomp(train$data)
 pca_pred <- predict(pca_res, test$data)
 
 # Hyperparameters
-PCA = 40 #Dis = 60, All = 40
-C = 10 #Dis = 1, All = 10
+PCA = 60 #Dis = 60, All = 40
+C = 1 #Dis = 1, All = 10
 KERNEL = "rbfdot"
 
 # Default parameter for "type" is : type = "C-svc" (C classification)
@@ -155,6 +155,34 @@ KERNEL = "rbfdot"
   cat("Acc:",acc," Train time:",time_rfTrainDuration," Test time:",time_rfTestDuration)
 }
 
+# ----------------------------------------------------- #
+#                         RESULTS
+# ----------------------------------------------------- #
+
+# AllIn 5/3 :
+# Acc: 95.26667  Train time: 18.32652  Test time: 9.236413
+
+# Disjunct 5/3 :
+# Acc: 74.23333  Train time: 34.74129  Test time: 14.47587
+
+# AllIn 30/7 :
+# Acc: 96.88824  Train time: 366.8312  Test time: 121.5842
+
+# Disjunct 30/7 :
+# Acc: 87.32353  Train time: 638.3923  Test time: 205.1079
+
+# AllIn 30/7 + minmax :
+# Acc: 97.2  Train time: 233.5232  Test time: 90.88178
+
+# Disjunct 30/7 + minmax :
+# Acc: 89.03824  Train time: 367.6147  Test time: 137.6061
+
+
+# ----------------------------------------------------- #
+#                         PLOT
+# ----------------------------------------------------- #
+
+# CURRENTLY NOT "WORKING"
 
 # SVM Classification plot for PC1 and PC2 :
 # Not really relevant but I keep it here in case
