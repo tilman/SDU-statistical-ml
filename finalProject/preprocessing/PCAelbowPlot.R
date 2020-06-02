@@ -17,10 +17,6 @@ accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 minmaxNorm <- function(line){
   return((line - min(line)) / (max(line)-min(line)))
 }
-applyKmean <- function(line){
-  kres <- kmeans(line, centers = 6, nstart=20)
-  return(kres$centers[kres$cluster])
-}
 getDisjunctNormed <- function(split, datasetSize){
   id <- do.call(rbind, idList[datasetSize])
   id <- as.data.frame(id)
@@ -38,8 +34,6 @@ getDisjunctNormed <- function(split, datasetSize){
   
   train_data <- t(apply(train_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
   test_data <- t(apply(test_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
-  #train_data <- t(apply(train_shuffle[,-1], 1, applyKmean)) #apply kmeans
-  #test_data <- t(apply(test_shuffle[,-1], 1, applyKmean)) #apply kmeans
   
   train_labels <- train_shuffle[,1]
   test_labels <- test_shuffle[,1]
@@ -123,11 +117,7 @@ NTREE = 300 #ab 200 fast stable, 300 wenig besser
 MTRY = 4 #try3 4-8, aber relativ stablil
 NODESIZE = 5 #try2 bis 1
 SAMPSIZE = 58000 #stable
-# Acc: 83.82941  Train time: 133.2597  Test time: 8.204128 # without norm
-# Acc: 85.67647  Train time: 138.7246  Test time: 6.371468 # with image wise norm
-# Acc: 82.54706  Train time: 134.4463  Test time: 6.680708 # with 3 k-means centers
-# Acc: 83.27353  Train time: 130.1682  Test time: 6.585257 # with 6 k-means centers
-# Acc: 83.27353  Train time: 130.1682  Test time: 6.585257 # with 10 k-means centers
+#Acc: 83.82941  Train time: 133.2597  Test time: 8.204128
 
 # PCA Hiscores:
 # 100dpi, 29.26388s train, 3.693782 test for all.
@@ -139,6 +129,10 @@ time_rfTrainDuration <- timerEnd("")
 timerStart("PCA TEST")
 pca_pred <- predict(pca_res, test$data)
 time_rfTrainDuration <- timerEnd("")
+
+eigen_values <- (1-1/nrow(train$data))*(pca_res$sdev)
+ggplot()+geom_point(aes(y=eigen_values,x=c(1:length(eigen_values))))
+ggplot()+geom_point(aes(y=pca_res$sdev,x=c(1:length(pca_res$sdev))))
 
 # 1: Try min-max norm, over all comps
 #Acc: 83.42941  Train time: 124.6357  Test time: 6.744413

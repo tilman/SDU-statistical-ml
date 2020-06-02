@@ -66,10 +66,14 @@ plotImages <- function(student){
   }
   rotate <- function(x) t(apply(x, 2, rev))
   imageSize = 18
-  id <- do.call(rbind, idList[1:47])
+  id <- do.call(rbind, idList[1:10])
+  
+  kmeans <- kmeans(id, 5)
+  
   #id[,-1] <- t(apply(id[,-1], 1, minmaxNorm)) #apply minmax norm
   id_mat <- data.matrix(id, rownames.force = NA)
-  par(mfrow=c(1,10),mar=c(0.5,0.5,0.5,0.5))
+  #par(mfrow=c(1,10),mar=c(0.5,0.5,0.5,0.5))
+  par(mfrow=c(2,5),mar=c(0.5,0.5,0.5,0.5))
   for(i in 1:10){
     cipherNumber <- -200+1*200+1 + ((i-1)*2000)
     print(cipherNumber)
@@ -79,6 +83,55 @@ plotImages <- function(student){
     #image( image, zlim=c(0,1), col=gray(0:100/100), main=capture.output(cat('image:',i)) )
     image( image, zlim=c(0,1), xaxt='n', yaxt='n', col=gray(0:100/100) )
   }
+  # REPORT PLOTS !!!!!!!!----!!!!!!!!!!!----!!!!!!!!!!!----!!!!!!!!!!!----!!!!!!!!!!!----!!!!!!!!!!!----!!!
+  
+  
+  
+  # kmeans plot
+  load("/Users/Tilman/Downloads/idList-corner-100-new.Rdata")
+  #load("/Users/Tilman/Downloads/idList-mid-100-new.Rdata")
+  minmaxNorm <- function(line){
+    return((line - min(line)) / (max(line)-min(line)))
+  }
+  applyKmean <- function(line){
+    kres <- kmeans(line, centers = 3, nclust=1)
+    return(kres$centers[kres$cluster])
+  }
+  rotate <- function(x) t(apply(x, 2, rev))
+  imageSize = 18
+  id <- do.call(rbind, idList[1:10])
+  #id[,-1] <- t(apply(id[,-1], 1, minmaxNorm)) #apply minmax norm
+  #id[,-1] <- t(apply(id[,-1], 1, applyKmean)) #apply kmeans
+  id_mat <- data.matrix(id[,-1], rownames.force = NA)
+  #par(mfrow=c(1,10),mar=c(0.5,0.5,0.5,0.5))
+  par(mfrow=c(2,5),mar=c(0.5,0.5,0.5,0.5))
+  for(i in 1:10){
+    i=7;
+    digit = 10;
+    cipherNumber <- -200+digit*200+digit + ((i-1)*2000)
+    rotated <- c(id_mat[cipherNumber,1:ncol(id_mat)])
+    #image <- matrix(rotated, nrow = imageSize, ncol = imageSize, byrow = FALSE)
+    kres <- kmeans(rotated, centers = 3, nstart = 1)
+    image <- matrix(kres$centers[kres$cluster], nrow = imageSize, ncol = imageSize, byrow = FALSE)
+    image <- ((image - min(image)) / (max(image) - min(image))) #norm
+    image <- rotate(image)
+    image( image, xaxt='n', yaxt='n', col=gray(0:100/100) )
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   

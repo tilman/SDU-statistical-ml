@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1590876691 "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.tex" "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.pdf" "report" 1591019939
+["pdflatex"] 1590876691 "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.tex" "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.pdf" "report" 1591019948
   "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.aux" 1590876692 5419 d91c497076b5b95cbd98e5ab79142c71 ""
   "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.tex" 1590875117 17190 03de2b8724ebbfe3e6f9d166a7a32987 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -134,9 +134,9 @@
   "report.out" 1590876692 938 f2df63f53b68a4e36c2b0859fea4f5ec "pdflatex"
   "report.tex" 1590875117 17190 03de2b8724ebbfe3e6f9d166a7a32987 ""
   (generated)
-  "report.aux"
+  "report.pdf"
   "report.out"
   "report.log"
+  "report.aux"
   "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.pdf"
-  "report.pdf"
   "/Users/Tilman/Documents/Programme/R/SDU-statistical-ml/finalProject/report.log"
