@@ -2,9 +2,9 @@ rm(list = ls()) # clear/reset current environment
 #dev.off() # clear plots
 library(randomForest)
 library(class)
-library(caret)
+#library(caret)
 library(rpart)
-library(furrr)
+#library(furrr)
 
 set.seed(423)
 
@@ -48,7 +48,7 @@ getAllInNormed <- function(split, datasetSize){
   id<-transform(id, V1=as.factor(V1)) #needed so we have a categorization not a regression problem
   
   dataset_shuffle <- id[sample(nrow(id)),]
-  #dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+  dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
   
   split_point <- nrow(dataset_shuffle)*split
   
@@ -89,7 +89,7 @@ NTREE = 300 #ab 200 fast stable, 300 wenig besser
 MTRY = 4 #try3 4-8, aber relativ stablil
 NODESIZE = 5 #try2 bis 1
 SAMPSIZE = 58000 #stable
-# Acc: 85.67647  Train time: 138.7246  Test time: 6.371468 # with image wise norm
+# Acc: 85.67647  Train time: 131.4218  Test time: 6.641279 # with image wise norm
 
 timerStart("PCA TRAIN")
 pca_res <- prcomp(train$data, .rank=PCA)
@@ -101,7 +101,7 @@ time_rfTrainDuration <- timerEnd("")
 {
   #TRAINING
   timerStart("RF TRAIN")
-  rf <- randomForest(train$labels ~ ., data = pca_res$x[,0:PCA], ntree = NTREE, mtry = MTRY, nodesize = NODESIZE)#, sampsize = SAMPSIZE)
+  rf <- randomForest(train$labels ~ ., data = pca_res$x[,1:PCA], ntree = NTREE, mtry = MTRY, nodesize = NODESIZE)#, sampsize = SAMPSIZE)
   time_rfTrainDuration <- timerEnd("")
   
   #TESTING
@@ -114,4 +114,3 @@ time_rfTrainDuration <- timerEnd("")
   acc <- accuracy(cm)
   cat("Acc:",acc," Train time:",time_rfTrainDuration," Test time:",time_rfTestDuration)
 }
-
