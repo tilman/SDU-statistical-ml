@@ -31,6 +31,8 @@ getDisjunctNormed <- function(split, datasetSize){
   
   train_data <- t(apply(train_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
   test_data <- t(apply(test_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+  #train_data <- train_shuffle[,-1]
+  #test_data <- test_shuffle[,-1]
   
   train_labels <- train_shuffle[,1]
   test_labels <- test_shuffle[,1]
@@ -75,7 +77,7 @@ timerEnd <- function(point){
   return(diff)
 }
 
-#dataset <- getAllInNormed(0.63829) #30 person train, 17 test
+#dataset <- getAllInNormed(0.63829,1:47) #30 person train, 17 test
 dataset <- getDisjunctNormed(0.63829,1:47) #30 person train, 17 test
 train = dataset$train
 test = dataset$test
@@ -89,7 +91,10 @@ NTREE = 300 #ab 200 fast stable, 300 wenig besser
 MTRY = 4 #try3 4-8, aber relativ stablil
 NODESIZE = 5 #try2 bis 1
 SAMPSIZE = 58000 #stable
-# Acc: 85.67647  Train time: 131.4218  Test time: 6.641279 # with image wise norm
+# Acc: 83.34706  Train time: 127.5661  Test time: 7.273665 # disjunct, no norm
+# Acc: 85.67647  Train time: 138.7246  Test time: 6.371468 # disjunct, with image wise norm
+# Acc: 93.97353  Train time: 129.8136  Test time: 7.184726 # all in, no norm
+# Acc: 93.74706  Train time: 139.1029  Test time: 7.46046  # all in, with image wise norm
 
 timerStart("PCA TRAIN")
 pca_res <- prcomp(train$data, .rank=PCA)
@@ -114,3 +119,4 @@ time_rfTrainDuration <- timerEnd("")
   acc <- accuracy(cm)
   cat("Acc:",acc," Train time:",time_rfTrainDuration," Test time:",time_rfTestDuration)
 }
+# name, dataset split, dataset size, acc, train time, test time

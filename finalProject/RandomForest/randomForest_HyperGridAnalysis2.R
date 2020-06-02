@@ -81,7 +81,7 @@ resId$time_rfTestDuration = do.call(rbind, resId$time_rfTestDuration)
 cat("Total runtime:",sum(resId$time_pcaTrainDuration) + sum(resId$time_rfTrainDuration)) #47h 53m
 cat("Max accuracy:",max(resId$acc)) #83.71471
 cat("Best combination:")
-print(resId[resId$acc == max(resId$acc),c(2:7,9)])
+print(resId[resId$acc == max(resId$acc),c(2:12)])
 #theme = theme_bw()
 theme = theme(legend.position = "right")
 #theme = NULL
