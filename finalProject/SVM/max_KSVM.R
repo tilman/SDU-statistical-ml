@@ -100,11 +100,6 @@ PCA = 60 #Dis = 60, All = 40
 C = 10
 KERNEL = "rbfdot"
 
-# Top parameters saved with Min/max norm :
-PCA =  #Dis = , All = 
-C = 
-KERNEL = ""
-
 
 # First try gave us :
 # For 30 train, 17 test, vanilladot, PCA = 60 and C = 10 
