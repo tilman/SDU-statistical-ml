@@ -38,8 +38,13 @@ load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList
     train_shuffle <- train[sample(nrow(train)),]
     test_shuffle <- test[sample(nrow(test)),]
     
-    train_data <- t(apply(train_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
-    test_data <- t(apply(test_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+    # without minmax norm : 
+    train_data <- train_shuffle[,-1]
+    test_data <- test_shuffle[,-1]
+    
+    # with minmax norm :
+    #train_data <- t(apply(train_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+    #test_data <- t(apply(test_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
     
     train_labels <- train_shuffle[,1]
     test_labels <- test_shuffle[,1]
@@ -57,7 +62,9 @@ load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList
     id<-transform(id, V1=as.factor(V1)) #needed so we have a categorization not a regression problem
     
     dataset_shuffle <- id[sample(nrow(id)),]
-    #dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm)) #apply minmax norm
+    
+    # minmax norm : 
+    #dataset_shuffle[,-1] <- t(apply(dataset_shuffle[,-1], 1, minmaxNorm))
     
     split_point <- nrow(dataset_shuffle)*split
     
@@ -100,12 +107,13 @@ load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList
 # Full dataset :
 
 #dataset <- getAllInNormed(0.63829, 0:47) #30 person train, 17 test
-dataset <- getDisjunctNormed(0.63829, 0:47) #30 person train, 17 test
+#dataset <- getDisjunctNormed(0.63829, 0:47) #30 person train, 17 test
 
 # Reduced version for test :
 
+dataset <- getAllInNormed(0.625, 0:8) #5 person train, 3 test
 #dataset <- getDisjunctNormed(0.625, 0:8) #5 person train, 3 test
-#dataset <- getAllInNormed(0.625, 0:8) #5 person train, 3 test
+
 
 
 train = dataset$train
@@ -115,8 +123,8 @@ pca_res <- prcomp(train$data)
 pca_pred <- predict(pca_res, test$data)
 
 # Hyperparameters
-PCA = 60 #Disjunct = 60, AllIn = 40
-C = 10
+PCA = 40 #Dis = 60, All = 40
+C = 10 #Dis = 1, All = 10
 KERNEL = "rbfdot"
 
 # Default parameter for "type" is : type = "C-svc" (C classification)

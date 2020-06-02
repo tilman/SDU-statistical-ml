@@ -104,7 +104,7 @@ pca_pred <- predict(pca_res, test$data)
 
 # Top parameters saved without Min/max norm :
 PCA = 60 #Dis = 60, All = 40
-C = 10
+C = 10 #Dis = 1, All = 10
 KERNEL = "rbfdot"
 
 
@@ -365,7 +365,7 @@ PCA_Disjunct = n_pca[maxVal(val_pca, acc_pca)]
 C_Disjunct = val_cost[maxVal(num_cost,acc_cost)]
 # The kernel with the best accuracy is :  rbfdot
 # The number of PC with the best accuracy is :  60
-# The cost with the best accuracy is :  10
+# The cost with the best accuracy is :  1
 
 
 
