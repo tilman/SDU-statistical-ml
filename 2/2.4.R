@@ -3,7 +3,7 @@ dev.off() # clear plots
 library(spatstat)
 library(class)
 library(caret)
-load("/Users/Tilman/Downloads/idList-co-100.Rdata")
+load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Exercises/idList-corner-100-new.Rdata")
 
 id <- do.call(rbind, idList[1:10]) # transform multi dimension data frame to list of datapoints
 id_mat <- data.matrix(id, rownames.force = NA)
@@ -25,7 +25,7 @@ cum_prop_var <- cumsum(prop_var) # cumsum of proportional variance
 par(mfrow=c(2,5),mar=c(2,2,2,2))
 # 2.4.1
 for(i in 1:10){
-  cipherNumber <- -400+i*400+1
+  cipherNumber <- -200+i*200+90+2000
   rotated <- c(id_mat[cipherNumber,2:ncol(id_mat)])
   rotated <- ((rotated - min(rotated)) / (max(rotated) - min(rotated)))
   
@@ -47,7 +47,7 @@ for(i in 1:10){
 par(mfrow=c(2,5),mar=c(2,2,2,2))
 # 2.4.3
 for(i in 1:10){
-  cipherNumber <- -400+i*400+1
+  cipherNumber <- -200+i*200+90+2000
   trunc <- id_pca$x[cipherNumber,cum_prop_var < 0.99] %*% #73 eigenvectors
             t(id_pca$rotation[,cum_prop_var < 0.99])
   rotated <- scale(trunc, center = -1 * id_pca$center, scale=FALSE)
@@ -60,7 +60,7 @@ for(i in 1:10){
 # 2.4.4
 par(mfrow=c(2,5),mar=c(2,2,2,2))
 for(i in 1:10){
-  cipherNumber <- -400+i*400+1
+  cipherNumber <- -200+i*200+90+2000
   trunc <- id_pca$x[cipherNumber,cum_prop_var < 0.90] %*% #73 eigenvectors
     t(id_pca$rotation[,cum_prop_var < 0.90])
   rotated <- scale(trunc, center = -1 * id_pca$center, scale=FALSE)

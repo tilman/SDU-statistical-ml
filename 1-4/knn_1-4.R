@@ -67,7 +67,7 @@ var(accs)
 
 
 # 1.4.4 
-load("~/Downloads/idList-co-100.rdata")
+load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Exercises/idList-corner-100-new.Rdata")
 
 # Individual 
 aList <- c(1:10)

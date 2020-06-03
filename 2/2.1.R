@@ -4,15 +4,15 @@ library(spatstat)
 library(class)
 library(caret)
 
-load("/Users/Tilman/Downloads/idList-co-100.Rdata")
+load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Exercises/idList-corner-100-new.Rdata")
 
 splitAllIn <- function(data,title){
   id <- do.call(rbind, idList[1:10]) #transform multi dimension data frame to list of datapoints
   dataset_shuffle <- id[sample(nrow(id)),]
-  test_split <- dataset_shuffle[0:20000,-1]
-  train_split <- dataset_shuffle[(20001):40000,-1]
-  test_classes <- dataset_shuffle[0:20000,1]
-  train_classes <- dataset_shuffle[(20001):40000,1]
+  test_split <- dataset_shuffle[0:10000,-1]
+  train_split <- dataset_shuffle[(10001):20000,-1]
+  test_classes <- dataset_shuffle[0:10000,1]
+  train_classes <- dataset_shuffle[(10001):20000,1]
   data <- list(test=test_split,train=train_split,test_labels=test_classes,train_labels=train_classes,title=title)
   return(data)
 }
@@ -24,10 +24,10 @@ splitDisjunct <- function(data,title){
   id_test <- as.data.frame(id_test)
   id_test$V1 <- factor(id_test$V1)
   
-  test_split <- id_test[0:20000,-1]
-  train_split <- id_train[0:20000,-1]
-  test_classes <- id_test[0:20000,1]
-  train_classes <- id_train[0:20000,1]
+  test_split <- id_test[0:10000,-1]
+  train_split <- id_train[0:10000,-1]
+  test_classes <- id_test[0:10000,1]
+  train_classes <- id_train[0:10000,1]
   data <- list(test=test_split,train=train_split,test_labels=test_classes,train_labels=train_classes,title=title)
   return(data)
 }
@@ -46,7 +46,7 @@ run_knn <- function(train_split, test_split, train_classes, test_classes, k){
 
 dataAllIn <- splitAllIn(idList,title="All Persons In")
 dataDisjunct <- splitDisjunct(idList,title="Disjunct")
-for(dataset in list(dataDisjunct)){
+for(dataset in list(dataAllIn)){
   cat("\n\n Dataset split:",dataset$title)
   
   # 2.1.1: Show the standard deviation...

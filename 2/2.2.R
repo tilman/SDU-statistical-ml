@@ -4,7 +4,7 @@ library(spatstat)
 library(class)
 library(caret)
 
-load("/Users/Tilman/Downloads/idList-co-100.Rdata")
+load("/Users/baptiste/Documents/SDU-TEK/Statistical Machine Learning/Exercises/idList-corner-100-new.Rdata")
 accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
 run_knn <- function(train_split, test_split, train_classes, test_classes, k){
   start_time <- Sys.time()
