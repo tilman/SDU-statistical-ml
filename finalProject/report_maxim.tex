@@ -359,10 +359,37 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 
 
 \subsection{Random Forest}
-=> use 10 fold crossvalidation with 43 to 4 with bigger set
 
-(remeber: Give information about the computational time required.)
-(remeber: Analyze the results and give proper explanations)
+\textcolor{baptiste}{For the Random Forest model, we are using a 10-folds cross validation. In order to have the sets containing only an exact number of people, we are going to work with 40 people instead of the 47 available in the full dataset.}
+
+\textcolor{baptiste}{The results are in the first two columns of Table \ref{table:CV_RF_results} and in Fig. \ref{fig:hyper:cv_results}}
+
+\begin{table*}[htbp]
+    \color{baptiste}
+    \caption{\color{baptiste}Cross Validation results for Random Forest model}
+    \begin{center}
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{} & \textbf{Random Forest "Disjunct"} & \textbf{Random Forest "All Persons In"} & \textbf{SVM "Disjunct"} & \textbf{SVM "All Persons In"}\\
+        \hline
+        Average accuracy & 94.85\% & 94.78\% & 96.9\% & 97.7\% \\
+        \hline
+        Variance & 0.024 & 0.079 & 0.012 & 0.011 \\
+        \hline
+        Average training error & 0.025\% & 0.024\% & 1.86\% & 0.29\% \\
+        \hline
+        Average training time & 217.5s & 260.1s & 571.3s & 298.0s \\
+        \hline
+        Average test time & 2.5s & 3.0s & 93.7s & 45.8s \\
+        \hline
+    \end{tabular}
+    \label{table:CV_RF_results}
+    \end{center}
+\end{table*}
+%=> use 10 fold crossvalidation with 43 to 4 with bigger set
+
+%(remeber: Give information about the computational time required.)
+%(remeber: Analyze the results and give proper explanations)
 
 \begin{figure*}[ht!]
     \centering
@@ -379,16 +406,27 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
         (a,b) Accuracy for "Disjunct" dataset and for "All Persons In" dataset respectively;
         (c,d) Training errors for "Disjunct" dataset and for "All Persons In" dataset respectively
     }
-    \label{fig:hyper:cv_RF}
+    \label{fig:hyper:cv_results}
 \end{figure*}
 
 \subsection{Support Vector Machine}
+\textcolor{baptiste}{For the SVM model, we only used 5 folds because of the runtimes of such models, that is meant to be more precise than Random Forest but also takes more time to compute.}
 
+\textcolor{baptiste}{For the same reason that we used the data from 40 people for the Random Forest, we are going to use 45 people for SVM.
+}
+
+\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_RF_results} and in the right column in Fig. \ref{fig:hyper:cv_results}}
+
+\subsection{Results interpretation}
+
+\textcolor{baptiste}{In all these situations we have a good training error and a good accuracy on unseen data with low variance so there is neither overfitting nor underfitting. Both the models we worked on are accurate and passed the cross validation test.}
+
+\textcolor{baptiste}{As mentioned at the beginning, we can see by the results of the cross validation that there is one model that is relatively fast (Random Forest) and one that is more accurate but takes more time (SVM)}
 
 \section{Future Work}
 Give an indication what could be further improved. 
 
-optimize Random forst model also on corner dataset and see how it works
+optimize Random forest model also on corner dataset and see how it works
 
 
 % \begin{thebibliography}{00}
