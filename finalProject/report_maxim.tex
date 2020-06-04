@@ -362,7 +362,7 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 
 \textcolor{baptiste}{For the Random Forest model, we are using a 10-folds cross validation. In order to have the sets containing only an exact number of people, we are going to work with 40 people instead of the 47 available in the full dataset.}
 
-\textcolor{baptiste}{The results are in the first two columns of Table \ref{table:CV_RF_results} and in Fig. \ref{fig:hyper:cv_results}}
+\textcolor{baptiste}{The results are in the first two columns of Table \ref{table:CV_RF_results} and in Fig. \ref{fig:hyper:cv_RF}}
 
 \begin{table*}[htbp]
     \color{baptiste}
@@ -383,7 +383,7 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
         Average test time & 2.5s & 3.0s & 93.7s & 45.8s \\
         \hline
     \end{tabular}
-    \label{table:CV_RF_results}
+    \label{table:CV_results}
     \end{center}
 \end{table*}
 %=> use 10 fold crossvalidation with 43 to 4 with bigger set
@@ -406,7 +406,7 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
         (a,b) Accuracy for "Disjunct" dataset and for "All Persons In" dataset respectively;
         (c,d) Training errors for "Disjunct" dataset and for "All Persons In" dataset respectively
     }
-    \label{fig:hyper:cv_results}
+    \label{fig:hyper:cv_RF}
 \end{figure*}
 
 \subsection{Support Vector Machine}
@@ -415,7 +415,25 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 \textcolor{baptiste}{For the same reason that we used the data from 40 people for the Random Forest, we are going to use 45 people for SVM.
 }
 
-\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_RF_results} and in the right column in Fig. \ref{fig:hyper:cv_results}}
+\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_results} and in the right column in Fig. \ref{fig:hyper:cv_SVM}}
+
+\begin{figure*}[ht!]
+    \centering
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_D_SVM.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_API_SVM.pdf}}\quad
+    
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_D_SVM.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_API_SVM.pdf}}\quad
+
+    \caption{
+        \color{baptiste}
+        Accuracy and training error for the subsets in the cross validation of the Support Vector Machine model \\ 
+        (a,b) Accuracy for "Disjunct" dataset and for "All Persons In" dataset respectively;
+        (c,d) Training errors for "Disjunct" dataset and for "All Persons In" dataset respectively
+    }
+    \label{fig:hyper:cv_SVM}
+\end{figure*}
 
 \subsection{Results interpretation}
 
