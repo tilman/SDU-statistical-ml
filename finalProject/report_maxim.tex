@@ -364,7 +364,23 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 (remeber: Give information about the computational time required.)
 (remeber: Analyze the results and give proper explanations)
 
+\begin{figure*}[ht!]
+    \centering
 
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_D_RF.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_API_RF.pdf}}\quad
+    
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_D_RF.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_API_RF.pdf}}\quad
+
+    \caption{
+        \color{baptiste}
+        Accuracy and training error for the subsets in the cross validation of the Random Forest model \\ 
+        (a,b) Accuracy for "Disjunct" dataset and for "All Persons In" dataset respectively;
+        (c,d) Training errors for "Disjunct" dataset and for "All Persons In" dataset respectively
+    }
+    \label{fig:hyper:cv_RF}
+\end{figure*}
 
 \subsection{Support Vector Machine}
 
