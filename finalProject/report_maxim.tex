@@ -33,15 +33,16 @@ timar20@student.sdu.dk \\
 \and
 \IEEEauthorblockN{2\textsuperscript{nd} Maxime Gatineau}
 \IEEEauthorblockA{\textit{Engineering Master} \\
-\textit{SDU Exchange Student)}\\
+\textit{SDU Exchange Student}\\
 Lille, France \\
 magat20@student.sdu.dk \\
 \color{maxim}{written text will appear in purple}}
 \and
-\IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
+\IEEEauthorblockN{3\textsuperscript{rd} Baptiste Piofret}
+\IEEEauthorblockA{
+\textit{SDU Exchange Student}\\
+Versailles, France \\
+bapio20@student.sdu.dk \\
 \color{baptiste}{written text will appear in blue}}
 }
 
@@ -229,21 +230,22 @@ During the grid search we tried out 3 different values for ${sampsize}$. This va
 \begin{figure*}[ht!]
     \centering
 
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Accuracy_Kernel.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Training_Kernel.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Testing_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Accuracy_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Training_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Testing_Kernel.pdf}}\quad
     
-     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Accuracy_PCA.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Training_PCA.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Testing_PCA.pdf}}\quad   
+     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Accuracy_PCA.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Training_PCA.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Testing_PCA.pdf}}\quad   
 
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Accuracy_Cost.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Training_Cost.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images/AllIn_Testing_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Accuracy_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Training_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Testing_Cost.pdf}}\quad
 
     \caption{
         \color{maxim}
-        Accuracy and runtime results of the hyperparameter for "All-in" dataset; (a,b,c) Kernel accuracy, training time and testing time, respectively; (d,e,f) PCA accuracy, training time and testing time, respectively; (g,h,i) Cost accuracy, training time and testing time, respectively;
+        Accuracy and runtime results of the hyperparameter for "All-in" dataset; \\ 
+        (a,b,c) Kernel accuracy, training time and testing time, respectively; (d,e,f) PCA accuracy, training time and testing time, respectively; (g,h,i) Cost accuracy, training time and testing time, respectively;
     }
     \label{fig:hyper:svm_param_allin}
 \end{figure*}
@@ -336,9 +338,22 @@ During the grid search we tried out 3 different values for ${sampsize}$. This va
 
 
 \section{Evaluation}
-Do a proper cross validation and indicate also mean and variances for all problems. Describe results on test and trainings set and reflect on overfitting. 
-(remeber: Give information about the computational time required.)
-(remeber: Analyze the results and give proper explanations)
+%Do a proper cross validation and indicate also mean and variances for all problems. Describe results on test and training set and reflect on overfitting. 
+%(remember: Give information about the computational time required.)
+%(remember: Analyze the results and give proper explanations)
+\textcolor{baptiste}{In machine learning, the first thought when a given model gives a satisfying result is to conclude that this model is working and to apply it to other similar situations. However, when the model gives one satisfying result, it does not necessarily mean that it will work for other situations or even when considering other training and test sets of the same dataset. To make sure that all the important information and patterns of the data is picked up correctly, we need to do more testing than a single random training and test set in the dataset.}
+
+\textcolor{baptiste}{To have an efficient machine learning model, it needs to be accurate on datasets it has never seen before. To make sure of that, we use what is called Cross Validation. It consists on taking a part of the dataset we are working on to train the model and the remaining part to test it as the data the model has never seen before.
+A good way to be really sure that the model is accurate is to use K-Fold Cross Validation. It consists in separating the dataset in K subsets and to use each subset as the test set while the other subsets are the training set. 
+}
+
+
+\textcolor{baptiste}{The main problems when testing a machine learning model are underfitting and overfitting. Underfitting occurs when the model does not have enough parameters to fit and classify the data correctly. It shows when the training validation errors are high. It means that the model did not learn enough from the training set and needs to be made more complex in order to pick up enough parameters.}
+
+\textcolor{baptiste}{Overfitting, on the other hand, is when the model has too many parameters. It shows when the training error is very low but the accuracy on unseen data is very poor. The model picked up too many parameters or parameters that are very specific to the training set and is not able to recognize objects in unseen data. In order to fix this issue, the model needs to be regulated and some parameters need to be removed.}
+
+\textcolor{baptiste}{These issues show that machine learning is not as straight forward as it may seem: the more parameters we take into account does not necessarily mean that the model will perform better. There is a balance that needs to be achieved.
+}
 
 
 
@@ -348,6 +363,11 @@ Do a proper cross validation and indicate also mean and variances for all proble
 
 (remeber: Give information about the computational time required.)
 (remeber: Analyze the results and give proper explanations)
+
+
+
+\subsection{Support Vector Machine}
+
 
 \section{Future Work}
 Give an indication what could be further improved. 
