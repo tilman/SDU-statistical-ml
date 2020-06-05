@@ -1,3 +1,10 @@
+%TODO:
+%* fix references
+%* II 1) change whole section to be generic for SVM and RF, not only rf preprocessing
+%* II 1) 100dpi test for SVM, find good reasoning
+
+
+
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
@@ -111,6 +118,73 @@ maybe write some intro sentences about the problem we try to solve
     \label{fig:dataset}
 \end{figure}
 
+
+\begin{figure*}[ht!]
+    \centering
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Accuracy_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Training_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Testing_Kernel.pdf}}\quad
+    
+     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Accuracy_PCA.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Training_PCA.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Testing_PCA.pdf}}\quad   
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Accuracy_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Training_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/AllIn_Testing_Cost.pdf}}\quad
+
+    \caption{
+        \color{maxim}
+        Accuracy and runtime results of the hyperparameter for "All-in" dataset; \\ 
+        (a,b,c) Kernel accuracy, training time and testing time, respectively; (d,e,f) PCA accuracy, training time and testing time, respectively; (g,h,i) Cost accuracy, training time and testing time, respectively;
+    }
+    \label{fig:hyper:svm_param_allin}
+\end{figure*}
+
+
+\section{Dataset and Preprocessing}
+%TODO: Describe your preprocessing (dpi, PCA, centering, smoothing, normalization). Also show images. 
+%TODO: why corner and not mid? => on a visual inspection corner seemed to be better centered and the digits better captured  => done
+\textcolor{til}{
+    During a visual inspection of the corner and mid dataset, the corner dataset seemed to better center the scanned digits and also cover the corners a bit better (See first two rows of Fig. \ref{fig:dataset}). We therefore decided to use the corner dataset for all out further analysis and the hyperparameter tuning. We later tried again the mid dataset on our tuned and optimized models and had worse results as with the corner dataset. This could prove our initial observations or more likely, the worse results are owed to the optimization of the model on the corner dataset. \\
+    %TODO: why image wise min max norm? => some images with low saturation, digits probably written with a bright pencil
+    While visually inspecting the dataset, we also discovered some images with low saturation, most likely these digits were written with a bright or colored pencil. In order to reduce the difference between images with high and low saturation, we apply a min-max-normalization on each image. Important to say is, that we are not using a traditional min-max-normalization with the minimum and maximum taken from the whole dataset but instead take the minimum and maximum from all 324 pixels of a single image and normalize the other pixel values with these minimum and maximum values. The result of this normalization is a dataset with equally saturated images as we can see in the third row of Fig. \ref{fig:dataset}. Especially for the disjunct problem this normalization improved the accuracy by 1,88\% for Random Forest. \\
+% }
+% \section{Preprocessing}
+% %TODO: why 100 dpi? => one goal was to be fast, small image size will increase fastness => done
+% \textcolor{til}{
+    As seen in Table \ref{table:timeComplexity} the amount of features will have a direct influence on the runtime. Since we want to keep the runtime low for our Random Forest we try to reduce the amount of features with PCA beforehand. The same will hold true for SVM as well, even if we did not care about the runtime for SVM that much, skipping the PCA would tremendously increase the training runtime of SVM as we can see on the $\mathcal{O}(n^3)$ part of the computational complexity. In order to minimize the runtime we used the dataset with 100dpi, since calculating the Principal Components will take way longer as higher the resolution of the input dataset is. Since we use a PCA preprocessing for the dataset we will not loose much information if using the smaller dataset anyhow. We proved that assumption later by trying out the bigger datasets with our final SVM solution and could not see a significant increase of accuracy.
+}
+
+\section{Hyper parameter Optimization}
+Both functions take several hyperparameters, that impact the accuracy of the classification. For finding the best hyperparameters and therefore the best classification results we tried out two different approaches. One was to manually fine tune on a smaller dataset and the other was to use a medium dataset for training but automate the process of finding the right hyperparameter with a grid search.
+
+\begin{table}[htbp]
+    \color{maxim}
+    \caption{\color{maxim}Hyperparameters manually tried for SVM}
+    \begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Hyperparameter} & \textbf{Sequence} \\
+        \hline
+        Kernel Type $K_{type}$ & vanilladot, rbfdot, polydot,\\ 
+        & tanhdot, laplacedot, besseldot\\
+        \hline
+        Amount of Principal Components $p$ & 25, 40, 50, 60, 75, 100, 150, 200\\
+        \hline
+        Cost $ C $ & $3^{-4}$, $3^{-2}$, $1$, $3^2$, $3^4$, $3^8$, $3^{12}$ \\
+        \hline
+        Kernel Parameter $K_{par}$ & "automatic", "manual"\\
+        \hline
+    \end{tabular}
+    \label{table:gridParamSVM}
+    \end{center}
+\end{table}
+
+
+
+
 \begin{figure*}[ht!]
     \centering
 
@@ -129,22 +203,44 @@ maybe write some intro sentences about the problem we try to solve
     \label{fig:hyper:pca}
 \end{figure*}
 
-\section{Dataset and Preprocessing}
-%TODO: Describe your preprocessing (dpi, PCA, centering, smoothing, normalization). Also show images. 
-%TODO: why corner and not mid? => on a visual inspection corner seemed to be better centered and the digits better captured  => done
-\textcolor{til}{
-    During a visual inspection of the corner and mid dataset, the corner dataset seemed to better center the scanned digits and also cover the corners a bit better (See first two rows of Fig. \ref{fig:dataset}). We therefore decided to use the corner dataset for all out further analysis and the hyperparameter tuning. We later tried again the mid dataset on our tuned and optimized models and had worse results as with the corner dataset. This could proof our initial observations or more likely, the worse results are owed to the optimization of the model on the corner dataset. \\
-    %TODO: why image wise min max norm? => some images with low saturation, digits probably written with a bright pencil
-    While visually inspecting the dataset, we also discovered some images with low saturation, most likely these digits were written with a bright or colored pencil. In order to reduce the difference between images with high and low saturation, we apply a min-max-normalization on each image. Important to say is, that we are not using a traditional min-max-normalization with the minimum and maximum taken from the whole dataset but instead take the minimum and maximum from all 324 pixels of a single image and normalize the other pixel values with these minimum and maximum values. The result of this normalization is a dataset with equally saturated images as we can see in the third row of Fig. \ref{fig:dataset}. Especially for the disjunct problem this normalization improved the accuracy by 1,88\% for Random Forest.
-}
-\subsubsection{Random Forest Dataset and Preprocessing}
-%TODO: why 100 dpi? => one goal was to be fast, small image size will increase fastness => done
-\textcolor{til}{
-    As seen in Table \ref{table:timeComplexity} the amount of features will have a direct influence on the runtime. Since we want to keep the runtime low for our Random Forest we try to reduce the amount of features with PCA beforehand. In behalf to minimize the runtime we used the dataset with 100dpi, since calculating the Principal Components will take way longer as higher the resolution of the input dataset is.
-}
 
-\subsection{Hyper parameter Optimization}
-Optimize critical parameters (discussed under 1) on a smaller set and document this optimization process.
+\begin{figure*}[ht!]
+    \centering
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Accuracy_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Training_Kernel.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Testing_Kernel.pdf}}\quad
+    
+     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Accuracy_PCA.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Training_PCA.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Testing_PCA.pdf}}\quad   
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Accuracy_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Training_Cost.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Testing_Cost.pdf}}\quad
+
+    \caption{
+        \color{maxim}
+        Accuracy and runtime results of the hyperparameters for the "Disjunct" dataset; \\ 
+        (a,b,c) Kernel accuracy, training time and testing time, respectively; (d,e,f) PCA accuracy, training time and testing time, respectively; (g,h,i) Cost accuracy, training time and testing time, respectively;
+    }
+    \label{fig:hyper:svm_param_allin}
+\end{figure*}
+
+\subsection{Hyper parameter Optimization for Support Vector Machine}\label{sec:hyper:svm}
+\textcolor{maxim}{
+    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.\\
+    \subsubsection{Kernel Type $K_{type}$}
+    Text here to explain the kernel type who got the best accuracy, why is it normal and stuff. \\
+    \subsubsection{Amount of Principal Components $p$}
+    Text here to explain the number of PC who got the best accuracy, why is it normal and the comparison between allin and disjunct. \\
+    \subsubsection{Cost $C$}
+    Text here to explain the Cost briefly and who got the best accuracy, why is it normal and the comparison between allin and disjunct. \\
+    \subsubsection{Kernel Parameters $K_{par}$}
+    Text here to explain the $K_{par}$ briefly and why we choose automatic.\\
+    \subsubsection{Brief overview of the results}
+    Text here to explain the results.\\
+}
 
 \begin{table}[htbp]
     \color{til}
@@ -189,9 +285,10 @@ Optimize critical parameters (discussed under 1) on a smaller set and document t
 \end{figure*}
 \subsection{Hyper parameter Optimization for Random Forest}\label{sec:hyper:rf}
 \textcolor{til}{
-    Since optimizing random forest on the smaller dataset, was not bringing the right generalization, we decided to use a medium size dataset of 30 distinct people for training and the remaining 17 for testing and automate the finding of the right hyperparameters with a grid search. Therefore we create a hyperparameter grid with 960 combinations of the 5 hyperparameters (See Table \ref{table:hyperParamGrid} for details of the grid) and splitted them into 10 segments. We then used 4 Google Colab and 6 Kaggle notebooks in parallel, to let each segment of combinations run on each notebook. For each run we saved the Random Forest training and prediction runtime and the prediction accuracy on the test set. Google Colab and Kaggle are using nearly the same Intel Xeon CPU which was important to have a comparable runtime. In total the gridsearch took 47 hours and 53 minutes. The best result had a test accuracy of 83.72\% (See Table \ref{table:timeIntermediateResults} for further information). In the following sections we will discuss the results of the gridsearch and how we used the results for a further manual fine tuning of the hyper parameters. 
+    % Since optimizing random forest on the smaller dataset, was not bringing the right generalization, we decided to use a medium size dataset of 30 distinct people for training and the remaining 17 for testing and automate the finding of the right hyperparameters with a grid search. 
+    For Random Forest we wanted to try out an more automatic approach to find the right hyperparameters. Because of the automation, the time did not matter so much anymore so we decided to use a medium size dataset of 30 distinct people for training and the remaining 17 for testing. We then automated the finding of the right hyperparameters with a grid search. Therefore we create a hyperparameter grid with 960 combinations of the 5 hyperparameters (See Table \ref{table:hyperParamGrid} for details of the grid) and splitted them into 10 segments. We then used 4 Google Colab and 6 Kaggle notebooks in parallel, to let each segment of combinations run on each notebook. For each run we saved the Random Forest training and prediction runtime and the prediction accuracy on the test set. Google Colab and Kaggle are using nearly the same Intel Xeon CPU which was important to have a comparable runtime. In total the gridsearch took 47 hours and 53 minutes. The best result had a test accuracy of 83.72\% (See Table \ref{table:timeIntermediateResults} for further information). In the following sections we will discuss the results of the gridsearch and how we used the results for a further manual fine tuning of the hyper parameters. 
     \subsubsection{Amount of Principal Components $p$}
-    The amount of features $p$ will have a direct influence on the training and testing runtime as we can see in the computational complexity $\mathcal{O}(n^2pn_{trees})$ and $\mathcal{O}(pn_{trees})$. In order to keep Random Forest fast, we use Principal Components Analysis (PCA) to reduce the amount of features and use the first $p$ Principal Components (PCs) as our $p$ input features for Random Forest. The runtime results of our hypergrid search also proof the theoretical computational complexity as we can see in Figure \ref{fig:hyper:pca}b). The highest test accuracy of our results (Figure \ref{fig:hyper:pca}a) could be achieved by taking the first 50 PCs as input features. Adding more components even decreased the accuracy, which indicates an overfitting. With 50 PCs as Input Features, performs Random Forest still very fast (around 3 seconds) while also archiving it's best accuracy for our problem (See cluster of green dots in upper left corner of Figure \ref{fig:hyper:pca}c). Hence we took the 50 PCs and manually fine tuned our model further. Finally we came up with a final value of 40 PCs for our Random Forest PCA preprocessing.
+    The amount of features $p$ will have a direct influence on the training and testing runtime as we can see in the computational complexity $\mathcal{O}(n^2pn_{trees})$ and $\mathcal{O}(pn_{trees})$. In order to keep Random Forest fast, we use Principal Components Analysis (PCA) to reduce the amount of features and use the first $p$ Principal Components (PCs) as our $p$ input features for Random Forest. The runtime results of our hypergrid search also prove the theoretical computational complexity as we can see in Figure \ref{fig:hyper:pca}b). The highest test accuracy of our results (Figure \ref{fig:hyper:pca}a) could be achieved by taking the first 50 PCs as input features. Adding more components even decreased the accuracy, which indicates an overfitting. With 50 PCs as Input Features, performs Random Forest still very fast (around 3 seconds) while also archiving it's best accuracy for our problem (See cluster of green dots in upper left corner of Figure \ref{fig:hyper:pca}c). Hence we took the 50 PCs and manually fine tuned our model further. Finally we came up with a final value of 40 PCs for our Random Forest PCA preprocessing.
 }
 \textcolor{til}{
 \subsubsection{Random Forest $n_{trees}$}
@@ -203,90 +300,6 @@ The hyper parameter ${nodesize}$ controls the minimum amount of samples in the l
 \subsubsection{Random Forest ${sampsize}$}
 During the grid search we tried out 3 different values for ${sampsize}$. This value will define how many samples from the input data are taken into consideration to generate the decission trees. Our grid search results did not showed a significant difference in accuracy between all of the 3 tested values. We therefore decided to use the default value of this hyperparameter.
 }
-
-\begin{table}[htbp]
-    \color{maxim}
-    \caption{\color{maxim}Sequences for the hyperparameter grid}
-    \begin{center}
-    \begin{tabular}{|c|c|}
-        \hline
-        \textbf{Hyperparameter} & \textbf{Sequence} \\
-        \hline
-        Kernel Type $K_{type}$ & vanilladot, rbfdot, polydot,\\ 
-        & tanhdot, laplacedot, besseldot\\
-        \hline
-        Amount of Principal Components $p$ & 25, 40, 50, 60, 75, 100, 150, 200\\
-        \hline
-        Cost $C$ & 3^{-4}, 3^{-2}, 1, 3^2, 3^4, 3^8, 3^{12}\\
-        \hline
-        Kernel Parameter $K_{par}$ & "automatic", "manual"\\
-        \hline
-    \end{tabular}
-    \label{table:gridParamSVM}
-    \end{center}
-\end{table}
-
-
-\begin{figure*}[ht!]
-    \centering
-
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Accuracy_Kernel.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Training_Kernel.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Testing_Kernel.pdf}}\quad
-    
-     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Accuracy_PCA.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Training_PCA.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Testing_PCA.pdf}}\quad   
-
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Accuracy_Cost.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Training_Cost.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/AllIn_Testing_Cost.pdf}}\quad
-
-    \caption{
-        \color{maxim}
-        Accuracy and runtime results of the hyperparameter for "All-in" dataset; \\ 
-        (a,b,c) Kernel accuracy, training time and testing time, respectively; (d,e,f) PCA accuracy, training time and testing time, respectively; (g,h,i) Cost accuracy, training time and testing time, respectively;
-    }
-    \label{fig:hyper:svm_param_allin}
-\end{figure*}
-
-\begin{figure*}[ht!]
-    \centering
-
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Accuracy_Kernel.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Training_Kernel.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Testing_Kernel.pdf}}\quad
-    
-     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Accuracy_PCA.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Training_PCA.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Testing_PCA.pdf}}\quad   
-
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Accuracy_Cost.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Training_Cost.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/SVM/Images_small/Disjunct_Testing_Cost.pdf}}\quad
-
-    \caption{
-        \color{maxim}
-        Accuracy and runtime results of the hyperparameters for the "Disjunct" dataset; \\ 
-        (a,b,c) Kernel accuracy, training time and testing time, respectively; (d,e,f) PCA accuracy, training time and testing time, respectively; (g,h,i) Cost accuracy, training time and testing time, respectively;
-    }
-    \label{fig:hyper:svm_param_allin}
-\end{figure*}
-
-\subsection{Hyper parameter Optimization for Support Vector Machine}\label{sec:hyper:svm}
-\textcolor{maxim}{
-    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.\\
-    \subsubsection{Kernel Type $K_{type}$}
-    Text here to explain the kernel type who got the best accuracy, why is it normal and stuff. \\
-    \subsubsection{Amount of Principal Components $p$}
-    Text here to explain the number of PC who got the best accuracy, why is it normal and the comparison between allin and disjunct. \\
-    \subsubsection{Cost $C$}
-    Text here to explain the Cost briefly and who got the best accuracy, why is it normal and the comparison between allin and disjunct. \\
-    \subsubsection{Kernel Parameters $K_{par}$}
-    Text here to explain the $K_{par}$ briefly and why we choose automatic.\\
-    \subsubsection{Brief overview of the results}
-    Text here to explain the results.\\
-    }
 
 % name, dataset split, dataset size, acc, train time, test time
 % # Acc: 93.74706  Train time: 139.1029  Test time: 7.46046  # all in, with image wise norm
@@ -321,7 +334,6 @@ During the grid search we tried out 3 different values for ${sampsize}$. This va
         SVM + min-max-norm & disjunct 30/7 & 368 sec. & 138 sec. & 89.04\% \\
         \hline
 
-        
         %\multicolumn{5}{l}{$n$ size of training dataset, $p$ number of features used } \\
         % \multicolumn{4}{l}{$p$ number of features used } \\
         %\multicolumn{4}{l}{$n_{trees}$ number of various trees, $n_{sv}$ number of support vectors } \\
@@ -395,11 +407,11 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 \begin{figure*}[ht!]
     \centering
 
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_D_RF.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_API_RF.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Accs_D_RF.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Accs_API_RF.pdf}}\quad
     
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_D_RF.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_API_RF.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Terr_D_RF.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Terr_API_RF.pdf}}\quad
 
     \caption{
         \color{baptiste}
@@ -421,11 +433,11 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 \begin{figure*}[ht!]
     \centering
 
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_D_SVM.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Accs_API_SVM.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Accs_D_SVM.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Accs_API_SVM.pdf}}\quad
     
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_D_SVM.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{finalProject/CrossValidation/Terr_API_SVM.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Terr_D_SVM.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{CrossValidation/Terr_API_SVM.pdf}}\quad
 
     \caption{
         \color{baptiste}
@@ -445,7 +457,10 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 \section{Future Work}
 Give an indication what could be further improved. 
 
-optimize Random forest model also on corner dataset and see how it works
+* optimize Random forest model also on mind dataset and see how it works
+* optimize model also on higher dpi dataset
+
+
 
 
 % \begin{thebibliography}{00}

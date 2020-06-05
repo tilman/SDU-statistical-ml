@@ -8,7 +8,7 @@ library(ggplot2)
 
 set.seed(423)
 
-load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList-corner-100-new.Rdata")
+load("C:/Users/maxim/Documents/_SDU/_Statistical Machine Learning/Project/idList-corner-200-new.Rdata")
 
 # ----------------------------------------------------- #
 #                       FUNCTIONS
