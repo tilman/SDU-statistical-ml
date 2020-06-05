@@ -275,17 +275,18 @@ During the grid search we tried out 3 different values for ${sampsize}$. This va
 
 \subsection{Hyper parameter Optimization for Support Vector Machine}\label{sec:hyper:svm}
 \textcolor{maxim}{
-    Text here.
-    (See Table \ref{table:gridParamSVM} for details of the grid) 
+    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.\\
     \subsubsection{Kernel Type $K_{type}$}
-    Text here to explain the kernel type who got the best accuracy, why is it normal and stuff. 
+    Text here to explain the kernel type who got the best accuracy, why is it normal and stuff. \\
     \subsubsection{Amount of Principal Components $p$}
-    Text here to explain the number of PC who got the best accuracy, why is it normal and the comparison between allin and disjunct
+    Text here to explain the number of PC who got the best accuracy, why is it normal and the comparison between allin and disjunct. \\
     \subsubsection{Cost $C$}
-    Text here to explain the Cost briefly and who got the best accuracy, why is it normal and the comparison between allin and disjunct
+    Text here to explain the Cost briefly and who got the best accuracy, why is it normal and the comparison between allin and disjunct. \\
     \subsubsection{Kernel Parameters $K_{par}$}
-    Text here to explain the $K_{par}$ briefly and why we choose automatic.
-}
+    Text here to explain the $K_{par}$ briefly and why we choose automatic.\\
+    \subsubsection{Brief overview of the results}
+    Text here to explain the results.\\
+    }
 
 % name, dataset split, dataset size, acc, train time, test time
 % # Acc: 93.74706  Train time: 139.1029  Test time: 7.46046  # all in, with image wise norm
@@ -415,7 +416,7 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 \textcolor{baptiste}{For the same reason that we used the data from 40 people for the Random Forest, we are going to use 45 people for SVM.
 }
 
-\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_results} and in the right column in Fig. \ref{fig:hyper:cv_SVM}}
+\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_results} and in Fig. \ref{fig:hyper:cv_SVM}}
 
 \begin{figure*}[ht!]
     \centering
