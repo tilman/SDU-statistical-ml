@@ -157,6 +157,51 @@ maybe write some intro sentences about the problem we try to solve
     As seen in Table \ref{table:timeComplexity} the amount of features will have a direct influence on the runtime. Since we want to keep the runtime low for our Random Forest we try to reduce the amount of features with PCA beforehand. The same will hold true for SVM as well, even if we did not care about the runtime for SVM that much, skipping the PCA would tremendously increase the training runtime of SVM as we can see on the $\mathcal{O}(n^3)$ part of the computational complexity. In order to minimize the runtime we used the dataset with 100dpi, since calculating the Principal Components will take way longer as higher the resolution of the input dataset is. Since we use a PCA preprocessing for the dataset we will not loose much information if using the smaller dataset anyhow. We proved that assumption later by trying out the bigger datasets with our final SVM solution and could not see a significant increase of accuracy.
 }
 
+
+\begin{table}[hb!]
+    % \color{til}
+    \caption{Intermediate results after hyperparameter tuning}
+    \begin{center}
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{Result name} & \textbf{Dataset$^{1)}$} & \textbf{Train time} & \textbf{Test time} & \textbf{Test acc.} \\
+        \hline
+        RF$^{2)}$ best gridsearch & disjunct 30/17 & 171 sec. & 3.26 sec. & 83.72\% \\
+        \hline
+        RF + MF$^{3)}$ & disjunct 30/17 & 127 sec. & 7.27 sec. & 84.15\% \\
+        \hline
+        RF + MF & all-in 30/17 & 129 sec. & 7.18 sec. & 93.97\% \\
+        \hline
+        RF + MF + NORM$^{4)}$ & disjunct 30/17 & 138 sec. & 6.37 sec. & 85.68\% \\
+        \hline
+        RF + MF + NORM & all-in 30/17 & 139 sec. & 7.46 sec. & 93.75\% \\
+        \hline
+        SVM (small dataset) & all-in 5/3 & 18.3 sec. & 9.24 sec. & 95.27\% \\
+        \hline
+        SVM (small dataset) & disjunct 5/3 & 34.7 sec. & 14.5 sec. & 74.23\% \\
+        \hline
+        SVM  & all-in 30/7 & 367 sec. & 127 sec. & 96.89\% \\
+        \hline
+        SVM  & disjunct 30/7 & 638 sec. & 205 sec. & 87.32\% \\
+        \hline
+        SVM + NORM & all-in 30/7 & 234 sec. & 90.9 sec. & 97.20\% \\
+        \hline
+        SVM + NORM & disjunct 30/7 & 368 sec. & 138 sec. & 89.04\% \\
+        \hline
+
+        \multicolumn{5}{l}{1) for Dataset the type and size of the split is given in amount of students } \\
+        \multicolumn{5}{l}{2) RF is Random Forest } \\
+        \multicolumn{5}{l}{3) MF is manually fine tuned } \\
+        \multicolumn{5}{l}{4) NORM is image wise min-max-norm } \\
+        % \multicolumn{4}{l}{$p$ number of features used } \\
+        %\multicolumn{4}{l}{$n_{trees}$ number of various trees, $n_{sv}$ number of support vectors } \\
+        % \multicolumn{4}{l}{$n_{sv}$ number of support vectors }
+    \end{tabular}
+    \label{table:timeIntermediateResults}
+    \end{center}
+\end{table}
+
 \section{Hyper parameter Optimization}
 Both functions take several hyperparameters, that impact the accuracy of the classification. For finding the best hyperparameters and therefore the best classification results we tried out two different approaches. One was to manually fine tune on a smaller dataset and the other was to use a medium dataset for training but automate the process of finding the right hyperparameter with a grid search.
 
@@ -188,25 +233,6 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
 \begin{figure*}[ht!]
     \centering
 
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_pca_acc_barplot.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_pca_trainDuration_barplot.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_pca_testDuration.pdf}}\quad
-
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_ntree_acc_barplot.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_ntree_trainDuration_barplot.pdf}}\quad
-    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_ntree_testDuration.pdf}}\quad
-
-    \caption{
-        \color{til}
-        Accuracy and runtime results of the 960 hyperparameter combinations; (a) Boxplot showing the accuracy for the hypergrid PCA sequence; (b) equivalent but for training runtime instead of accuracy; (c) accuracy over test runtime, ideal would be a point in the top left corner; (d,e,f) respectively to (a,b,c) but for amount of various trees $n_tree$ instead of $p$.
-    }
-    \label{fig:hyper:pca}
-\end{figure*}
-
-
-\begin{figure*}[ht!]
-    \centering
-
     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Accuracy_Kernel.pdf}}\quad
     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Training_Kernel.pdf}}\quad
     \subfloat[][]{\includegraphics[width=0.3201\linewidth]{SVM/Images_small/Disjunct_Testing_Kernel.pdf}}\quad
@@ -227,9 +253,29 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     \label{fig:hyper:svm_param_allin}
 \end{figure*}
 
+
+\begin{figure*}[ht!]
+    \centering
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_pca_acc_barplot.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_pca_trainDuration_barplot.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_pca_testDuration.pdf}}\quad
+
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_ntree_acc_barplot.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_ntree_trainDuration_barplot.pdf}}\quad
+    \subfloat[][]{\includegraphics[width=0.3201\linewidth]{RandomForest/hypergrid/plots/final_run_28052020_ntree_testDuration.pdf}}\quad
+
+    \caption{
+        \color{til}
+        Accuracy and runtime results of the 960 hyperparameter combinations; (a) Boxplot showing the accuracy for the hypergrid PCA sequence; (b) equivalent but for training runtime instead of accuracy; (c) accuracy over test runtime, ideal would be a point in the top left corner; (d,e,f) respectively to (a,b,c) but for amount of various trees $n_tree$ instead of $p$.
+    }
+    \label{fig:hyper:pca}
+\end{figure*}
+
+
 \subsection{Hyper parameter Optimization for Support Vector Machine}\label{sec:hyper:svm}
 \textcolor{maxim}{
-    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.\\
+    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in table \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.\\
     \subsubsection{Kernel Type $K_{type}$}
     Text here to explain the kernel type who got the best accuracy, why is it normal and stuff. \\
     \subsubsection{Amount of Principal Components $p$}
@@ -283,6 +329,9 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     }
     \label{fig:hyper:mtry}
 \end{figure*}
+
+
+
 \subsection{Hyper parameter Optimization for Random Forest}\label{sec:hyper:rf}
 \textcolor{til}{
     % Since optimizing random forest on the smaller dataset, was not bringing the right generalization, we decided to use a medium size dataset of 30 distinct people for training and the remaining 17 for testing and automate the finding of the right hyperparameters with a grid search. 
@@ -301,47 +350,10 @@ The hyper parameter ${nodesize}$ controls the minimum amount of samples in the l
 During the grid search we tried out 3 different values for ${sampsize}$. This value will define how many samples from the input data are taken into consideration to generate the decission trees. Our grid search results did not showed a significant difference in accuracy between all of the 3 tested values. We therefore decided to use the default value of this hyperparameter.
 }
 
+
+
 % name, dataset split, dataset size, acc, train time, test time
 % # Acc: 93.74706  Train time: 139.1029  Test time: 7.46046  # all in, with image wise norm
-\begin{table*}[htbp]
-    % \color{til}
-    \caption{Intermediate Results after hyperparameter tuning}
-    \begin{center}
-    \begin{tabular}{|l|c|c|c|c|}
-        \hline
-        \textbf{Result name} & \textbf{Dataset split in students } & \textbf{Train time} & \textbf{Test time} & \textbf{Test accuracy} \\
-        \hline
-        Random Forest best gridsearch & disjunct 30 / 17 & 171 sec. & 3.26 sec. & 83.72\% \\
-        \hline
-        Random Forest + manual finetuned & disjunct 30 / 17 & 127 sec. & 7.27 sec. & 84.15\% \\
-        \hline
-        Random Forest + manual finetuned & all-in 30/17 & 129 sec. & 7.18 sec. & 93.97\% \\
-        \hline
-        Random Forest + manual finetuned + image wise min-max-norm & disjunct 30/17 & 138 sec. & 6.37 sec. & 85.68\% \\
-        \hline
-        Random Forest + manual finetuned + image wise min-max-norm & all-in 30/17 & 139 sec. & 7.46 sec. & 93.75\% \\
-        \hline
-        SVM (small dataset) & all-in 5/3 & 18.3 sec. & 9.24 sec. & 95.27\% \\
-        \hline
-        SVM (small dataset) & disjunct 5/3 & 34.7 sec. & 14.5 sec. & 74.23\% \\
-        \hline
-        SVM  & all-in 30/7 & 367 sec. & 127 sec. & 96.89\% \\
-        \hline
-        SVM  & disjunct 30/7 & 638 sec. & 205 sec. & 87.32\% \\
-        \hline
-        SVM + min-max-norm & all-in 30/7 & 234 sec. & 90.9 sec. & 97.20\% \\
-        \hline
-        SVM + min-max-norm & disjunct 30/7 & 368 sec. & 138 sec. & 89.04\% \\
-        \hline
-
-        %\multicolumn{5}{l}{$n$ size of training dataset, $p$ number of features used } \\
-        % \multicolumn{4}{l}{$p$ number of features used } \\
-        %\multicolumn{4}{l}{$n_{trees}$ number of various trees, $n_{sv}$ number of support vectors } \\
-        % \multicolumn{4}{l}{$n_{sv}$ number of support vectors }
-    \end{tabular}
-    \label{table:timeIntermediateResults}
-    \end{center}
-\end{table*}
 
 %problem: on a smaller set!!! => maybe say smaller set was 30people and use crossvalidation with 43 to 4 with bigger set => argue why 30people was not a problem, because of colab and kaggle we choose 30people and let it run over night
 %explain grid search for: PCA, NTREE, MTRY, NODESIZE, SAMPSIZE
