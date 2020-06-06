@@ -20,7 +20,7 @@
     hidelinks
 }
 \definecolor{til}{HTML}{1E8449}
-\definecolor{maxim}{HTML}{6C3483}
+\definecolor{maxim}{HTML}{ef962d}
 \definecolor{baptiste}{HTML}{21618C}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -55,10 +55,10 @@ bapio20@student.sdu.dk \\
 
 \maketitle
 
-\begin{abstract}
-final project abstract, use random forest and ...
-maybe write some intro sentences about the problem we try to solve
-\end{abstract}
+%\begin{abstract}
+%final project abstract, use random forest and ...
+%maybe write some intro sentences about the problem we try to solve
+%\end{abstract}
 
 \section{Introduction}
 %Give a brief intuitive summary of the two chosen classification algorithms. Identify the critical parameters.
@@ -70,11 +70,7 @@ maybe write some intro sentences about the problem we try to solve
     For the fast but not so precise algorithm we choosed Random Forest. In addition to classical Decision Trees, will Random Forest generalize better on unseen data (important for the distinct people problem) by controlling the amount of various trees ($n_{trees}$). At the same time $n_{trees}$ will have a direct influence on our training and prediction time as seen in Table \ref{table:timeComplexity}, so we have to find a good balance for this hyper parameter. Other critical hyper parameters for Random Forest are: The amount of input features ($p$); Amount of features tried ($m_{try}$); Nodesize (${nodesize}$) controlling the tree depth; And lastly the sample size (${sampsize}$). We will discuss them in detail in Section \ref{sec:hyper:rf}.}
 
 \textcolor{maxim}{
-    For the slower but more precise method we decided to use a Support Vector Machine (SVM).
-    Insert explanation of SVM here and a brief statement why.
-}
-\textcolor{maxim}{
-    Critical hyper parameters for Support Vector Machine are: The type of Kernel used ($K_{type}$); The amount of Principal Components ($p$); The Cost ($C$); And lastly, the parameter of the Kernel ($K_{par}$).
+    For the slower but more precise method we decided to use a Support Vector Machine (SVM). The main advantage is the ability to handle high dimensional datasets with the use of a kernel-trick, i.e replacing the features by a kernel function. Critical hyper parameters for Support Vector Machine are: The type of Kernel used ($K_{type}$); The amount of Principal Components ($p$); The Cost ($C$); And lastly, the parameter of the Kernel ($K_{par}$).  We will discuss them in detail in Section \ref{sec:hyper:svm}.
 }
 
 % \begin{itemize}
@@ -154,8 +150,7 @@ maybe write some intro sentences about the problem we try to solve
 % \section{Preprocessing}
 % %TODO: why 100 dpi? => one goal was to be fast, small image size will increase fastness => done
 % \textcolor{til}{
-    As seen in Table \ref{table:timeComplexity} the amount of features will have a direct influence on the runtime. Since we want to keep the runtime low for our Random Forest we try to reduce the amount of features with PCA beforehand. The same will hold true for SVM as well, even if we did not care about the runtime for SVM that much, skipping the PCA would tremendously increase the training runtime of SVM as we can see on the $\mathcal{O}(n^3)$ part of the computational complexity. In order to minimize the runtime we used the dataset with 100dpi, since calculating the Principal Components will take way longer as higher the resolution of the input dataset is. Since we use a PCA preprocessing for the dataset we will not loose much information if using the smaller dataset anyhow. We proved that assumption later by trying out the bigger datasets with our final SVM solution and could not see a significant increase of accuracy.
-}
+    As seen in Table \ref{table:timeComplexity} the amount of features will have a direct influence on the runtime. Since we want to keep the runtime low for our Random Forest we try to reduce the amount of features with PCA beforehand. The same will hold true for SVM as well, even if we did not care about the runtime for SVM that much, skipping the PCA would tremendously increase the training runtime of SVM as we can see on the $\mathcal{O}(n^3)$ part of the computational complexity. In order to minimize the runtime we used the dataset with 100dpi, since calculating the Principal Components will take way longer as higher the resolution of the input dataset is. Since we use a PCA preprocessing for the dataset we will not loose much information if using the smaller dataset anyhow. We proved that assumption later by trying out the bigger datasets with our final SVM solution and could not see a significant increase of accuracy.}
 
 
 \begin{table}[hb!]
@@ -175,7 +170,7 @@ maybe write some intro sentences about the problem we try to solve
         \hline
         RF + MF + NORM$^{4)}$ & disjunct 30/17 & 138 sec. & 6.37 sec. & 85.68\% \\
         \hline
-        RF + MF + NORM & all-in 30/17 & 139 sec. & 7.46 sec. & \textbf{93.75\%} \\
+        RF + MF + NORM & all-in 30/17 & 139 sec. & \textbf{7.46 sec.} & \textbf{93.75\%} \\
         \hline
         SVM (small dataset) & all-in 5/3 & 18.3 sec. & 9.24 sec. & 95.27\% \\
         \hline
@@ -204,32 +199,6 @@ maybe write some intro sentences about the problem we try to solve
 
 \section{Hyper parameter Optimization}
 Both functions take several hyperparameters, that impact the accuracy of the classification. For finding the best hyperparameters and therefore the best classification results we tried out two different approaches. One was to manually fine tune on a smaller dataset and the other was to use a medium dataset for training but automate the process of finding the right hyperparameter with a grid search.
-
-\begin{table}[htbp]
-    \color{maxim}
-    \caption{\color{maxim}Hyperparameters manually tried for SVM}
-    \begin{center}
-    \begin{tabular}{|c|c|}
-        \hline
-        \textbf{Hyperparameter} & \textbf{Sequence} \\
-        \hline
-        Kernel Type $K_{type}$ & vanilladot, rbfdot, polydot,\\ 
-        & tanhdot, laplacedot, besseldot\\
-        \hline
-        Amount of Principal Components $p$ & 25, 40, 50, 60, 75, 100, 150, 200\\
-        \hline
-        Cost $ C $ & $3^{-4}$, $3^{-2}$, $1$, $3^2$, $3^4$, $3^8$, $3^{12}$ \\
-        \hline
-        Kernel Parameter $K_{par}$ & "automatic", "manual"\\
-        \hline
-    \end{tabular}
-    \label{table:gridParamSVM}
-    \end{center}
-\end{table}
-
-
-
-
 \begin{figure*}[ht!]
     \centering
 
@@ -252,8 +221,6 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     }
     \label{fig:hyper:svm_param_disjunct}
 \end{figure*}
-
-
 \begin{figure*}[ht!]
     \centering
 
@@ -271,26 +238,42 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     }
     \label{fig:hyper:pca}
 \end{figure*}
-
-
+\begin{table}[htbp]
+    \color{maxim}
+    \caption{\color{maxim}Hyperparameters manually tried for SVM}
+    \begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Hyperparameter} & \textbf{Sequence} \\
+        \hline
+        Kernel Type $K_{type}$ & vanilladot, rbfdot, polydot,\\ 
+        & tanhdot, laplacedot, besseldot\\
+        \hline
+        Amount of Principal Components $p$ & 25, 40, 50, 60, 75, 100, 150, 200\\
+        \hline
+        Cost $ C $ & $3^{-4}$, $3^{-2}$, $1$, $3^2$, $3^4$, $3^8$, $3^{12}$ \\
+        \hline
+        Kernel Parameter $K_{par}$ & "automatic", "manual"\\
+        \hline
+    \end{tabular}
+    \label{table:gridParamSVM}
+    \end{center}
+\end{table}
 \subsection{Hyper parameter Optimization for Support Vector Machine}\label{sec:hyper:svm}
 \textcolor{maxim}{
-    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in table \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.\\
+    For the optimization of the SVM parameters we decided to use a small dataset of 8 people, 5 for the training set and 3 for the training set. Therefore, it reduced considerably the computation time. For the hyperparameters, we proceed as follow for both "All-in" and "Disjunct" dataset : first we checked all the different Kernel type, then we applied a Principal Component (PC) Analysis with different value of PCs followed by checking the effect of the cost function to our accuracy to finish by slightly modifying the kernel's parameter. We can see in table \ref{table:gridParamSVM} the sequence's detail of our optimization for all the parameters.
     \subsubsection{Kernel Type $K_{type}$}
-    One of the main feature of SVM is the Kernel function that is used to shaped the data into the required form where a separator can be more easily found. We tried almost all of them for this paper and we could see some huge change in terms of accuracy when we use our SVM algorithm with different kernel. Also, since "anovadot" is used for regression problem, we decided to drop it because we have a classification problem. \\
+    One of the main feature of SVM is the Kernel function that is used to shaped the data into the required form where a separator can be more easily found. We tried almost all of them for this paper and we could see some huge change in terms of accuracy when we use our SVM algorithm with different kernel. Also, since "anovadot" is used for regression problem, we decided to drop it because we have a classification problem.
+    In both Fig. \ref{fig:hyper:svm_param_allin} and Fig. \ref{fig:hyper:svm_param_disjunct}, the kernel are in this order : "vanilladot", "rbfdot", "polydot", "tanhdot", "laplacedot", "besseldot" (from 1 to 6).
+    It is not surprising that "rbfdot" was the one with the highest accuracy since it is the most flexible regardless of the dataset. Therefore, we decided to use the radial basis function kernel "rbfdot" with its two parameters, the Cost $C$ and gamma $\gamma$. Both parameters are going to be discussed in the next sub section.
     \subsubsection{Amount of Principal Components $p$}
     Even if we are not focusing on our running time, PCA is still a way to greatly reduced it while increasing the accuracy. Indeed, we can see in Fig. \ref{fig:hyper:svm_param_allin} and Fig. \ref{fig:hyper:svm_param_disjunct} that PCA, when tuned correctly, can improve the accuracy of the SVM. Therefore, we picked 40 Principal Components for the "All-in" dataset and 60 for the "Disjunct" dataset.
     \subsubsection{Cost $C$}
-    The cost defines the weight of how much samples inside the margin contribute to the overall error or, in other words, how much we want to avoid miss-classifying our dataset. Therefore, we can adjust how hard or soft our large margin classification should be. \\
-    For instance, with a $C$ of 0, the margin will be bigger, so samples inside the margins are not penalized anymore and on the other side, with an infinite $C$ the margin will be smaller there is less chance to miss-classify our training data. That is why we chose this sequence for the Cost in Table \ref{table:gridParamSVM}, so we can cover most of the necessary cost's cases.\\
-    A quick look at Fig. \ref{fig:hyper:svm_param_allin} and Fig. \ref{fig:hyper:svm_param_disjunct} reveals us that past a certain threshold we don't have a big increase of the accuracy nor a lower computation time. But this doesn't mean we can take any value past that threshold, in fact, taking a $C$ too high would lead to overfitting. Therefore, we stopped at this threshold. For example, in Fig. \ref{fig:hyper:svm_param_allin} our best cost is 10 (because we rounded $3^2$) and in Fig. \ref{fig:hyper:svm_param_disjunct} our best cost is 1. \\
+    The cost defines the weight of how much samples inside the margin contribute to the overall error or, in other words, how much we want to avoid miss-classifying our dataset. Therefore, we can adjust how hard or soft our large margin classification should be.s
+    For instance, with a $C$ of 0, the margin will be bigger, so samples inside the margins are not penalized anymore and on the other side, with an infinite $C$ the margin will be smaller there is less chance to miss-classify our training data. That is why we chose this sequence for the Cost in Table \ref{table:gridParamSVM}, so we can cover most of the necessary cost's cases.
+    A quick look at Fig. \ref{fig:hyper:svm_param_allin} and Fig. \ref{fig:hyper:svm_param_disjunct} reveals us that past a certain threshold we don't have a big increase of the accuracy nor a lower computation time. But this doesn't mean we can take any value past that threshold, in fact, taking a $C$ too high would lead to overfitting. Therefore, we stopped at this threshold. For example, in Fig. \ref{fig:hyper:svm_param_allin} our best cost is 10 (because we rounded $3^2$) and in Fig. \ref{fig:hyper:svm_param_disjunct} our best cost is 1.
     \subsubsection{Kernel Parameters $K_{par}$}
-    Text here to explain the $K_{par}$ briefly and why we choose automatic.\\
-    \subsubsection{Brief overview of the results}
-    Text here to explain the results.
-}
-
-
+    Since we are using "rbfdot" for our analysis, we can have a look at its equation to understand which parameter is going to be important. We have \(k(x_{i},x_{j})=exp(-\gamma||x_{i}-x_{j}||^{2})\) so we can see that the only parameter is $\gamma$. It represents the inverse of the radius of influence of samples selected and with $K_{par}$ set on "automatic", the SVM algorithm will automatically calculate a good $\gamma$. This is what we decided to use for our analysis and we set $K_{par}$ to "automatic".}
 \begin{figure*}[ht!]
     \centering
 
@@ -309,8 +292,7 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     \label{fig:hyper:mtry}
 \end{figure*}
 
-
-\begin{table}[htpb!]
+\begin{table}[b!]
     \color{til}
     \caption{\color{til}Sequences for the hyperparameter grid}
     \begin{center}
@@ -332,16 +314,12 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     \label{table:hyperParamGrid}
     \end{center}
 \end{table}
-
 \subsection{Hyper parameter Optimization for Random Forest}\label{sec:hyper:rf}
 \textcolor{til}{
     % Since optimizing random forest on the smaller dataset, was not bringing the right generalization, we decided to use a medium size dataset of 30 distinct people for training and the remaining 17 for testing and automate the finding of the right hyperparameters with a grid search. 
     For Random Forest we wanted to try out an more automatic approach to find the right hyperparameters. Because of the automation, the time did not matter so much anymore so we decided to use a medium size dataset of 30 distinct people for training and the remaining 17 for testing. We then automated the finding of the right hyperparameters with a grid search. Therefore we create a hyperparameter grid with 960 combinations of the 5 hyperparameters (See Table \ref{table:hyperParamGrid} for details of the grid) and splitted them into 10 segments. We then used 4 Google Colab and 6 Kaggle notebooks in parallel, to let each segment of combinations run on each notebook. For each run we saved the Random Forest training and prediction runtime and the prediction accuracy on the test set. Google Colab and Kaggle are using nearly the same Intel Xeon CPU which was important to have a comparable runtime. In total the gridsearch took 47 hours and 53 minutes. The best result had a test accuracy of 83.72\% (See Table \ref{table:timeIntermediateResults} for further information). In the following sections we will discuss the results of the gridsearch and how we used the results for a further manual fine tuning of the hyper parameters. 
-    \subsubsection{Amount of Principal Components $p$}
-    The amount of features $p$ will have a direct influence on the training and testing runtime as we can see in the computational complexity $\mathcal{O}(n^2pn_{trees})$ and $\mathcal{O}(pn_{trees})$. In order to keep Random Forest fast, we use Principal Components Analysis (PCA) to reduce the amount of features and use the first $p$ Principal Components (PCs) as our $p$ input features for Random Forest. The runtime results of our hypergrid search also prove the theoretical computational complexity as we can see in Figure \ref{fig:hyper:pca}b). The highest test accuracy of our results (Figure \ref{fig:hyper:pca}a) could be achieved by taking the first 50 PCs as input features. Adding more components even decreased the accuracy, which indicates an overfitting. With 50 PCs as Input Features, performs Random Forest still very fast (around 3 seconds) while also archiving it's best accuracy for our problem (See cluster of green dots in upper left corner of Figure \ref{fig:hyper:pca}c). Hence we took the 50 PCs and manually fine tuned our model further. Finally we came up with a final value of 40 PCs for our Random Forest PCA preprocessing.
-}
-
-\textcolor{til}{
+\subsubsection{Amount of Principal Components $p$}
+The amount of features $p$ will have a direct influence on the training and testing runtime as we can see in the computational complexity $\mathcal{O}(n^2pn_{trees})$ and $\mathcal{O}(pn_{trees})$. In order to keep Random Forest fast, we use Principal Components Analysis (PCA) to reduce the amount of features and use the first $p$ Principal Components (PCs) as our $p$ input features for Random Forest. The runtime results of our hypergrid search also prove the theoretical computational complexity as we can see in Figure \ref{fig:hyper:pca}b). The highest test accuracy of our results (Figure \ref{fig:hyper:pca}a) could be achieved by taking the first 50 PCs as input features. Adding more components even decreased the accuracy, which indicates an overfitting. With 50 PCs as Input Features, performs Random Forest still very fast (around 3 seconds) while also archiving it's best accuracy for our problem (See cluster of green dots in upper left corner of Figure \ref{fig:hyper:pca}c). Hence we took the 50 PCs and manually fine tuned our model further. Finally we came up with a final value of 40 PCs for our Random Forest PCA preprocessing.
 \subsubsection{Random Forest $n_{trees}$}
 As we would expect it from the computational complexity and as we can see it in our test results the amount of various trees $n_{trees}$, which the Random Forest algorithm growth, heavily effects train runtime (see Fig. \ref{fig:hyper:pca}e)) as well as test runtime (see Fig. \ref{fig:hyper:pca}f)). We therefore looking for the lowest value of $n_{trees}$ which still achieves a good accuracy. As we can see in Figure \ref{fig:hyper:pca}d) the accuracy does not vary a lot between 200 or 300 Trees, so we decided on a final $n_{trees}$ value of 200, because of the faster test and train runtime.
 \subsubsection{Random Forest $m_{try}$}
@@ -364,6 +342,28 @@ During the grid search we tried out 3 different values for ${sampsize}$. This va
 %(remeber: Give information about the computational time required.)
 
 
+\begin{table*}[t!]
+    \color{baptiste}
+    \caption{\color{baptiste}Cross Validation results for Random Forest model}
+    \begin{center}
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{} & \textbf{Random Forest "Disjunct"} & \textbf{Random Forest "All Persons In"} & \textbf{SVM "Disjunct"} & \textbf{SVM "All Persons In"}\\
+        \hline
+        Average accuracy & 94.85\% & 94.78\% & 96.9\% & 97.7\% \\
+        \hline
+        Variance & 0.024 & 0.079 & 0.012 & 0.011 \\
+        \hline
+        Average training error & 0.025\% & 0.024\% & 1.86\% & 0.29\% \\
+        \hline
+        Average training time & 217.5s & 260.1s & 571.3s & 298.0s \\
+        \hline
+        Average test time & 2.5s & 3.0s & 93.7s & 45.8s \\
+        \hline
+    \end{tabular}
+    \label{table:CV_results}
+    \end{center}
+\end{table*}
 \section{Evaluation}
 %Do a proper cross validation and indicate also mean and variances for all problems. Describe results on test and training set and reflect on overfitting. 
 %(remember: Give information about the computational time required.)
@@ -389,30 +389,7 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 
 \textcolor{baptiste}{For the Random Forest model, we are using a 10-folds cross validation. In order to have the sets containing only an exact number of people, we are going to work with 40 people instead of the 47 available in the full dataset.}
 
-\textcolor{baptiste}{The results are in the first two columns of Table \ref{table:CV_RF_results} and in Fig. \ref{fig:hyper:cv_RF}}
-
-\begin{table*}[htbp]
-    \color{baptiste}
-    \caption{\color{baptiste}Cross Validation results for Random Forest model}
-    \begin{center}
-    \begin{tabular}{|l|c|c|c|c|}
-        \hline
-        \textbf{} & \textbf{Random Forest "Disjunct"} & \textbf{Random Forest "All Persons In"} & \textbf{SVM "Disjunct"} & \textbf{SVM "All Persons In"}\\
-        \hline
-        Average accuracy & 94.85\% & 94.78\% & 96.9\% & 97.7\% \\
-        \hline
-        Variance & 0.024 & 0.079 & 0.012 & 0.011 \\
-        \hline
-        Average training error & 0.025\% & 0.024\% & 1.86\% & 0.29\% \\
-        \hline
-        Average training time & 217.5s & 260.1s & 571.3s & 298.0s \\
-        \hline
-        Average test time & 2.5s & 3.0s & 93.7s & 45.8s \\
-        \hline
-    \end{tabular}
-    \label{table:CV_results}
-    \end{center}
-\end{table*}
+\textcolor{baptiste}{The results are in the first two columns of Table \ref{table:CV_results} and in Fig. \ref{fig:hyper:cv_RF}. We can see that the variance is very low on the accuracy on the test sets, and even though the values for the accuracy are very close for Disjunct and All Persons In, the variance for the All Persons In folds is a bit higher than the one for the Disjunct folds. It seams a bit odd that it is the case but it may be linked to the way the data is shuffled and the amount of entries for each ciphers that the model can train on. For example with the Disjunct case, the model can train on the exact same amount of entries for each digit in the train set. The training error seams a bit scattered as well but it is just because of the scale : all the errors are within 0.01\%.}
 %=> use 10 fold crossvalidation with 43 to 4 with bigger set
 
 %(remeber: Give information about the computational time required.)
@@ -442,7 +419,7 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 \textcolor{baptiste}{For the same reason that we used the data from 40 people for the Random Forest, we are going to use 45 people for SVM.
 }
 
-\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_results} and in Fig. \ref{fig:hyper:cv_SVM}}
+\textcolor{baptiste}{The results are in the last two columns of Table \ref{table:CV_results} and in Fig. \ref{fig:hyper:cv_SVM}. The difference between Disjunct and All Persons In is that for the first one we used 60 principal components given by the PCA analysis and the second one only 40. That is why the runtimes for training and testing are lower in All Persons In. Even though, we used less principal components, can see that All Persons In is more accurate on average than Disjunct and that the training error is higher for Disjunct but still remains reasonably low.}
 
 \begin{figure*}[ht!]
     \centering
@@ -464,15 +441,12 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 
 \subsection{Results interpretation}
 
-\textcolor{baptiste}{In all these situations we have a good training error and a good accuracy on unseen data with low variance so there is neither overfitting nor underfitting. Both the models we worked on are accurate and passed the cross validation test.}
+\textcolor{baptiste}{In all these situations, we have a training error low enough to conclude that our models are not underfitting. We now have to look at the results on unseen data. The average accuracy is always above 94\%, which is a very satisfying result. We can say that the models are not overfitting either. Both the models we worked on are accurate and passed the cross validation test.}
 
 \textcolor{baptiste}{As mentioned at the beginning, we can see by the results of the cross validation that there is one model that is relatively fast (Random Forest) and one that is more accurate but takes more time (SVM)}
 
 \section{Future Work}
-Give an indication what could be further improved. 
-
-* optimize Random forest model also on mind dataset and see how it works
-* optimize model also on higher dpi dataset
+Here are a few things that we can apply to our analysis in our future work : we can optimize Random forest model also on mind dataset and see how it works and we can optimize model also on higher dpi dataset. 
 
 
 
