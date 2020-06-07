@@ -33,11 +33,11 @@
 \begin{document}
 
 \title{Statistical Machine Learning Final Project\\
-    {\large solved with Random Forest and SVM}
+    {\large Group 14 : solved with Random Forest and SVM}
 }
 
 \author{\IEEEauthorblockN{1\textsuperscript{st} Tilman Marquart}
-\IEEEauthorblockA{\textit{Computer Science Bachelor} \\
+\IEEEauthorblockA{\textit{Computer Science Bachelor} \\ 
 \textit{SDU Exchange Student}\\
 Nuremberg, Germany \\
 timar20@student.sdu.dk \\
@@ -51,7 +51,7 @@ magat20@student.sdu.dk \\
 \color{maxim}{written text will appear in brown}}
 \and
 \IEEEauthorblockN{3\textsuperscript{rd} Baptiste Piofret}
-\IEEEauthorblockA{
+\IEEEauthorblockA{\textit{Engineering Master} \\
 \textit{SDU Exchange Student}\\
 Versailles, France \\
 bapio20@student.sdu.dk \\
@@ -281,7 +281,7 @@ Both functions take several hyperparameters, that impact the accuracy of the cla
     For instance, with a $C$ of 0, the margin will be bigger, so samples inside the margins are not penalized anymore and on the other side, with an infinite $C$ the margin will be smaller there is less chance to miss-classify our training data. That is why we chose this sequence for the Cost in Table \ref{table:gridParamSVM}, so we can cover most of the necessary cost's cases.
     A quick look at Fig. \ref{fig:hyper:svm_param_allin} and Fig. \ref{fig:hyper:svm_param_disjunct} reveals us that past a certain threshold we do not have a big increase of the accuracy nor a lower computation time. But this does not mean we can take any value past that threshold, in fact, taking a $C$ too high would lead to overfitting. Therefore, we stopped at this threshold. For example, in Fig. \ref{fig:hyper:svm_param_allin} our best cost is 10 (because we rounded $3^2$) and in Fig. \ref{fig:hyper:svm_param_disjunct} our best cost is 1.
     \subsubsection{Kernel Parameters $K_{par}$}
-    Since we are using "rbfdot" for our analysis, we can have a look at its equation to understand which parameter is going to be important. We have \(k(x_{i},x_{j})=exp(-\gamma||x_{i}-x_{j}||^{2})\) so we can see that the only parameter is $\gamma$. It represents the inverse of the radius of influence of samples selected and with $K_{par}$ set on "automatic", the SVM algorithm will automatically calculate a good $\gamma$. This is what we decided to use for our analysis and we set $K_{par}$ to "automatic".}
+    Since we are using "rbfdot" for our analysis, we can have a look at its equation to understand which parameter is going to be important. We have \(k(x_{i},x_{j})=exp(-\gamma||x_{i}-x_{j}||^{2})\) so we can see that the only parameter is $\gamma$. It represents the inverse of the radius of influence of samples selected and with $K_{par}$ set on "automatic", the SVM algorithm will automatically calculate a good $\gamma$. This is why we decided to use for our analysis and we set $K_{par}$ to "automatic".}
 \begin{figure*}[ht!]
     \centering
 
@@ -352,7 +352,7 @@ During the grid search we tried out 3 different values for ${sampsize}$. This va
 
 \begin{table*}[t!]
     \color{baptiste}
-    \caption{\color{baptiste}Cross Validation results for Random Forest model}
+    \caption{\color{baptiste}Cross Validation results}
     \begin{center}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
@@ -453,8 +453,9 @@ A good way to be really sure that the model is accurate is to use K-Fold Cross V
 
 \textcolor{baptiste}{As mentioned at the beginning, we can see by the results of the cross validation that there is one model that is relatively fast (Random Forest) and one that is more accurate but takes more time (SVM)}
 
-\section{Future Work}
-Here are a few things that we can apply to our analysis in our future work : we can optimize Random forest model also on mind dataset and see how it works and we can optimize model also on higher dpi dataset. 
+\section{Conclusion and Future Work}
+To conclude, we presented two algorithms for a classification task. They are not used in the same context, one is way faster whereas the other one is more accurate. We can see from Table \ref{table:timeIntermediateResults} and Table \ref{table:CV_results} that we obtained really great results for our model.\\
+Here are a few things that we can apply to our analysis in our future work : we can optimize Random forest model on other dpi dataset and see how it works; we can optimize SVM with a grid (as for the Random Forest analysis) to see if there are any correlation between the different hyper-parameters. Also, we can apply different algorithm to test them all and see if one can fit better or if our assumption were correct.
 
 
 
